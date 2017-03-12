@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Device Log Report Screen</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+		<link href="webjars/ng-table/ng-table.min.css" rel="stylesheet" media="screen"/>
+<!-- 		<link href="webjars/angular-chart.js/angular-chart.min.css" rel="stylesheet" media="screen"/> -->
+
+		<script src="webjars/jquery/jquery.min.js"></script>
+		<script src="webjars/bootstrap/js/bootstrap.min.js"></script>
+		<script src="webjars/angular/angular.min.js"></script>
+		<script src="webjars/ng-table/ng-table.min.js"></script>
+		<script src="webjars/angular-sanitize/angular-sanitize.min.js"></script>
+		<script src="webjars/ng-csv/ng-csv.min.js"></script>
+		<script src="webjars/chartjs/Chart.js"></script>
+		<script src="webjars/angular-chart.js/angular-chart.min.js"></script>
+		<script src="report.js" type="text/javascript"></script>
+	</head>
+
+	<body ng-app="mtrak" style="padding-top: 80px;">
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+						aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#" style="padding-top: 5px;"><span style="padding-right: 5px;"><img style="height: 40px; width: auto;" alt="Brand" src="mTrak.ico"/></span>Device Usage Report</a>
+				</div>
+			</div>
+		</nav>
+		<div class="container" ng-controller="logController">
+			<div class="col-md-12">
+				<button type="button" ng-disabled="data.length < 1" ng-csv="dttosw" filename="mtrak_android_device_usage_report_{{current | date:'MMMM_yyyy'}}.csv"
+						class="btn btn-primary btn-sm pull-right" csv-header="csv_headers">Export to CSV</button>
+				<div class="pull-right" style="padding-right: 10px;">
+					<button type="button" ng-click="loadMonth(-1)" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+					<span>{{current | date:'MMMM yyyy'}}</span>
+					<button ng-disabled="!showNext()" ng-click="loadMonth(1)" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+				</div>
+				<div class="form-group pull-right" style="padding-right: 10px;">
+					<select id="sel1" class="form-control" style="width: auto;" ng-model="selectedSite" ng-change="filterSite()">
+						<option value="">All</option>
+						<option ng-repeat="st in sites" value="{{st}}">{{st}}</option>
+					</select>
+				</div>
+			</div>
+			<div id="content">
+				<ul id="tabs" class="nav nav-tabs col-md-12" data-tabs="tabs">
+					<li role="presentation" class="active"><a href="#table" data-toggle="tab">Table</a></li>
+					<li role="presentation"><a href="#chart" data-toggle="tab">Chart</a></li>
+				</ul>
+				<div id="my-tab-content" class="tab-content">
+					<div id="table" class="col-md-12 tab-pane active" style="padding-top: 20px;">
+						<table ng-table="logsTable" class="table table-striped">
+							<tr ng-repeat="log in data">
+								<td data-title="csv_headers[0]" sortable="'site'">{{log.site}}</td>
+								<td data-title="csv_headers[1]" sortable="'label'">{{log.label}}</td>
+								<td data-title="csv_headers[2]" sortable="'device'">{{log.device}}</td>
+								<td data-title="csv_headers[3]" sortable="'lastUsed'">{{log.lastUsed}}</td>
+								<td data-title="csv_headers[4]" sortable="'lastUsedBy'">{{log.lastUsedBy}}</td>
+								<td data-title="csv_headers[5]" sortable="'count'"><span class="pull-right">{{log.count}}</span></td>
+							</tr>
+						</table>
+					</div>
+					<div id="chart" class="col-md-12 tab-pane" ng-show="chart_data.length > 0" style="padding-top: 20px;">
+						<canvas class="chart chart-bar" chart-data="[chart_data]" chart-labels="chart_labels" chart-options="chart_options">
+						</canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
