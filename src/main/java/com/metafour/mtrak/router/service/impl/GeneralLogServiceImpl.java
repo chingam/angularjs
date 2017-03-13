@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.metafour.mtrak.router.entities.DragAndDrop;
 import com.metafour.mtrak.router.entities.EventLog;
 import com.metafour.mtrak.router.entities.GeneralLog;
 import com.metafour.mtrak.router.repositories.EventLogRepo;
@@ -67,7 +68,7 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 				eventLogRepo.save(eventLog2);
 			}
 		}
-		WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCode(obj.getCode()));
+		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCode(obj.getCode()));
 		eventDatas=null;
 		return generalLog;
 	}
@@ -83,6 +84,7 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 		// TODO Auto-generated method stub
 		
 	}
+
 	
 
 }
