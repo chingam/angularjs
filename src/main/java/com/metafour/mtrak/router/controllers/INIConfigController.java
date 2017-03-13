@@ -1,5 +1,8 @@
 package com.metafour.mtrak.router.controllers;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -16,13 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.metafour.mtrak.router.entities.DragAndDrop;
 import com.metafour.mtrak.router.entities.EventLog;
 import com.metafour.mtrak.router.entities.GeneralLog;
 import com.metafour.mtrak.router.service.EventLogService;
 import com.metafour.mtrak.router.service.GeneralLogService;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 /**
  * @author Minhaj
@@ -54,6 +55,44 @@ public class INIConfigController {
 		
 		return response;
 	}
+	
+	
+	@RequestMapping(value="/sortingUpdate", method = RequestMethod.POST)
+	public HashMap<String, Object> sortingUpdate(@RequestBody ArrayList<DragAndDrop> dragAndDrops) {
+		HashMap<String, Object> response=new HashMap<String, Object>();
+		
+		if(!dragAndDrops.isEmpty()){
+			generalLogService.updateByCode(dragAndDrops);
+			for (DragAndDrop dragAndDrop : dragAndDrops) {
+				System.out.println("value>>"+dragAndDrop.getCode()+"ID >>"+dragAndDrop.getId());
+			}
+				response.put("message", "Success");
+		}else{
+			response.put("message", "operation fail");
+		}
+		
+		return response;
+	}
+	
+	
+	@RequestMapping(value="/getsort", method = RequestMethod.GET)
+	public ArrayList<DragAndDrop> getsort() {
+		ArrayList<DragAndDrop> res=new ArrayList<DragAndDrop>();
+		DragAndDrop obj=new DragAndDrop();
+		obj.setCode("M");
+		obj.setId(1);
+		res.add(obj);
+		
+		DragAndDrop obj1=new DragAndDrop();
+		obj1.setCode("M");
+		obj1.setId(1);
+		res.add(obj1);
+		return res;
+	}
+	
+	
+	
+	
 
 	@RequestMapping(value="/fetch/system/{systemCode}", method = RequestMethod.GET)
 	@ApiOperation(tags="Event Logs", value="Site Code", notes="Get device upload logs")

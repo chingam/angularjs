@@ -1,6 +1,5 @@
 package com.metafour.mtrak.router.service.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,9 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 	
 	@Autowired
 	EventLogRepo eventLogRepo;
+	
+	@Autowired
+	EventHql eventHql;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -57,18 +59,28 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 	public GeneralLog save(GeneralLog obj, ArrayList<EventLog> eventDatas) {
 		// TODO Auto-generated method stub
 		GeneralLog generalLog = null;
+		Integer id=0;
 		for (EventLog eventLog2 : eventDatas) {
 			EventLog event=eventLogRepo.findByCodeAndSystemCode(eventLog2.getCode(), obj.getCode());
 			if(event!=null){
 				eventLogRepo.deleteAllBySystemCode(obj.getCode());
 			}
 			if(obj.getCode()!=null){
+				id++;
 				eventLog2.setSystemCode(obj.getCode());
+				eventLog2.setId(id);
 				generalLog=generalLogRepo.save(obj);
 				eventLogRepo.save(eventLog2);
 			}
 		}
-		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCode(obj.getCode()));
+		if(dragAndDrops!=null){
+			for (DragAndDrop dragAndDrop : dragAndDrops) {
+				eventHql.updateDragAndDrop(dragAndDrop.getCode(), dragAndDrop.getId());
+			}
+			
+		}
+		
+		WriteUtils.writeINIFIle("C:/Windows/Temp/", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByIdAsc(obj.getCode()));
 		eventDatas=null;
 		return generalLog;
 	}
@@ -83,6 +95,12 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 	public void deleteAllBySystemCode(String systemCode) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	ArrayList<DragAndDrop> dragAndDrops;
+	@Override
+	public void updateByCode(ArrayList<DragAndDrop> dragAndDrops) {
+		this.dragAndDrops=dragAndDrops;
 	}
 
 	

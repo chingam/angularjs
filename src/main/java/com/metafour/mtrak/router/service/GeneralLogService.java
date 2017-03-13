@@ -18,4 +18,5 @@ public interface GeneralLogService {
 	GeneralLog save(GeneralLog obj,  ArrayList<EventLog> eventDatas);
 	void deleteAllBySystemCode(String systemCode);
 	void delete(GeneralLog obj);
+	void updateByCode(ArrayList<DragAndDrop> dragAndDrops);
 }

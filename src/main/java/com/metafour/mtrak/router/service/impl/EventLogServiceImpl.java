@@ -35,7 +35,7 @@ public class EventLogServiceImpl implements EventLogService {
 	@Transactional(readOnly = true)
 	public ArrayList<EventLog> findAllBySystemCode(String systemCode) {
 		// TODO Auto-generated method stub
-		return eventLogRepo.findAllBySystemCode(systemCode);
+		return eventLogRepo.findAllBySystemCodeOrderByIdAsc(systemCode);
 	}
 
 	@Override

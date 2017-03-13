@@ -32,7 +32,7 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:h2:file:/tmp/mrouter
+    url: jdbc:h2:file:C:/Windows/Temp/mrouter
     username: sa
     password: sa
     driver-class-name: org.h2.Driver

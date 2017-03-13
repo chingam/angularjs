@@ -3,6 +3,7 @@ package com.metafour.mtrak.router.service.impl;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Repository
-public class CommentHql {
+public class EventHql {
 
 	@PersistenceContext
 	EntityManager entityManager;
@@ -27,8 +28,9 @@ public class CommentHql {
 	@Transactional(readOnly=true)
 	public void updateDragAndDrop(String code, Integer id) {
 		Session session = getCurrentSession();
-		String sql="UPDATE EventLog SET id="+id+" WHERE code="+code;
-		session.createSQLQuery(sql);
+		String sql="UPDATE com.metafour.mtrak.router.entities.EventLog a SET a.id="+id+" WHERE a.code='"+code+"'";
+		Query query=session.createQuery(sql);
+		query.executeUpdate();
 	}
 	
 }

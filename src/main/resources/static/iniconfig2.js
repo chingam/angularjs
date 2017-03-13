@@ -8,6 +8,75 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 	$scope.chart_data = [];
 	
 	
+	//################################################
+	var list = [];
+	jQuery(function($) {
+        var panelList2 = $('#draggablePanelList2');
+
+        panelList2.sortable({
+            // Only make the .panel-heading child elements support dragging.
+            // Omit this to make then entire <li>...</li> draggable.
+            handle: '.thumbnail', 
+            update: function() {
+            	var list = [];
+                $('.col-xs-18', panelList2).each(function(index, elem) {
+                     var $listItem = $(elem),
+                         newIndex = $listItem.index();
+			
+			
+
+			//var id = elem.item.attr("[id=codem]").val();
+			
+			
+			var str = $(this).find("[id=codem]").text();
+			var res = str.split("=");
+			res=res[1];
+			console.log(res.trim());
+			console.log(index);
+			
+			
+			list.push({ code: res.trim(), id: index+1});
+			
+                     // Persist the new indices.
+                });
+                //requ
+                
+                var jsData=JSON.stringify(list);
+    			var config = {
+    	                headers : {
+    	                    'Content-Type': 'application/json;charset=utf-8;'
+    	                }
+    	            }
+    			
+    			
+    			$http.post('/sortingUpdate', jsData, config)
+    	        .success(function (data, status, headers, config) {
+    	            $scope.PostDataResponse = data;
+    	            
+    	        })
+    	        .error(function (data, status, header, config) {
+    	            $scope.ResponseDetails = data;
+    	        });
+    			
+    			//##############
+            }
+        });
+    });
+	
+	//###################################################
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	$scope.resetForm=function(){
 		$scope.items="";
 		$scope.searchModel="";

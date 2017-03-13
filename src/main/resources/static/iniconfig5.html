@@ -21,29 +21,7 @@
 <script>
    
 
-    jQuery(function($) {
-        var panelList2 = $('#draggablePanelList2');
-
-        panelList2.sortable({
-            // Only make the .panel-heading child elements support dragging.
-            // Omit this to make then entire <li>...</li> draggable.
-            handle: '.thumbnail', 
-            update: function() {
-                $('.col-xs-18', panelList2).each(function(index, elem) {
-                     var $listItem = $(elem),
-                         newIndex = $listItem.index();
-			
-			
-
-			//var id = elem.item.attr("[id=codem]").val();
-			console.log($(this).find("[id=codem]").text());
-			console.log(index);
-			
-                     // Persist the new indices.
-                });
-            }
-        });
-    });
+    
 </script>
 	</head>
 
@@ -168,8 +146,7 @@
 				  				</div>
 				  				<div class="col-md-3">
 					    			  GPSEnable : 
-									  <input type="radio" ng-model="gPSEnable" value="Y"> Y
-									  <input type="radio" ng-model="gPSEnable" value="N"> N
+									  <input type="checkbox" ng-model="gPSEnable" ng-true-value="Y" ng-false-value="N">
 				  				</div>
 							</div>
 							
