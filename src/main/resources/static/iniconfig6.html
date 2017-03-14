@@ -166,25 +166,36 @@
 							<button class="btn btn-primary" ng-click="addNew()" data-toggle="modal" data-target="#myModalHorizontal"><i class="glyphicon glyphicon-plus"></i>Add</button>
 						</div>
 					</div>
-					<div class="row" id="draggablePanelList2">
-					        <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="log in items">
-					          <div class="thumbnail">
-					          <button class="btn btn-danger btn-xs pull-right" ng-click="deleteData(log)"><i class="glyphicon glyphicon-trash"></i></button>
-					          <button class="btn btn-info btn-xs pull-right" role="button" ng-click="edit(log)"><i class="glyphicon glyphicon-edit"></i></button>
-					              <div class="caption">
-					                <strong class="label label-default">Type = {{log.type}}</strong></br>
-					                <span class="label label-default" id="codem">Code = {{log.code}}</span></br>
-					                <span class="label label-default">Description = {{log.description}}</span></br>
-					                <span class="label label-default">LbAdditionalText	= {{log.lbAdditionalText}}</span></br>
-					                
-					                <span class="label label-default">RqAdditionalText	= {{log.rqAdditionalText}}</span></br>
-					                <span class="label label-default">RqSignature	= {{log.rqSignature}}</span></br>
-					                <span class="label label-default">RqShelfmark	= {{log.rqShelfmark}}</span></br>
-					                <span class="label label-default">MnAdditionalText	= {{log.mnAdditionalText}}</span></br>
-					            </div>
-					          </div>
-					        </div>
-			  			</div>
+					<table id="logTableId" class="table table-striped">
+						<thead>
+							<tr>
+								<th>Type</th>
+								<th>Code</th>
+								<th>Description</th>
+								<th>RQSignature</th>
+								<th>RQAdditionalText</th>
+								<th>RQShelfmark</th>
+								<th>LBAdditionalText</th>
+								<th>MNAdditionalText</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="log in items">
+								<td>{{log.type}}</td>
+								<td>{{log.code}}</td>
+								<td>{{log.description}}</td>
+								<td>{{log.rqSignature}}</td>
+								<td>{{log.rqAdditionalText}}</td>
+								<td>{{log.rqShelfmark}}</td>
+								<td>{{log.lbAdditionalText}}</td>
+								<td>{{log.mnAdditionalText}}</td>
+								<td>
+								<button class="btn btn-info btn-sm" ng-click="edit(log)"><span class="glyphicon glyphicon-edit"></span></button>
+								<button class="btn btn-danger btn-sm" ng-click="deleteData(log)"><span class="glyphicon glyphicon-trash"></span></button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>

@@ -80,7 +80,7 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 			
 		}
 		
-		WriteUtils.writeINIFIle("C:/Windows/Temp/", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByIdAsc(obj.getCode()));
+		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByIdAsc(obj.getCode()));
 		eventDatas=null;
 		return generalLog;
 	}

@@ -94,19 +94,19 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 		$scope.warningScanLimit="";
 		$scope.maxUploadSize="";
 		$scope.uploadSleepInterval="";
-		$scope.jobCreate="";
+		$scope.jobCreate=false;
 		$scope.deliveryTimeDuration="",
-		$scope.validateMessenger="";
-		$scope.gPSEnable="";
+		$scope.validateMessenger=false;
+		$scope.gPSEnableData=false;
 		
 		$scope.typeModal="";
 		$scope.codeModal="";
 		$scope.descriptionModal="";
-		$scope.signatureModel="";
-		$scope.additionalTextModel="";
+		$scope.signatureModel=false;
+		$scope.additionalTextModel=false;
 		$scope.LbAdditionalTextModel="";
-		$scope.mnAdditionalTextModel="";
-		$scope.rqShelfmarkModel="";
+		$scope.mnAdditionalTextModel=false;
+		$scope.rqShelfmarkModel=false;
 		$('#btnAdd').prop('title', 'save');
 	}
 	
@@ -127,12 +127,13 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
     		$scope.warningScanLimit=data.gData.warningScanLimit;
     		$scope.maxUploadSize=data.gData.maxUploadSize;
     		$scope.uploadSleepInterval=data.gData.uploadSleepInterval;
-    		$scope.jobCreate=data.gData.jobCreate;
-    		$scope.deliveryTimeDuration=data.gData.deliveryTimeDuration,
-    		$scope.validateMessenger=data.gData.validateMessenger;
-    		$scope.gPSEnable=data.gData.gPSEnable;
+    		$scope.jobCreate=(data.gData.jobCreate==="Y"?true:false);
+    		$scope.deliveryTimeDuration=data.gData.deliveryTimeDuration;
+    		$scope.validateMessenger=(data.gData.validateMessenger=="Y"?true:false);
+		$scope.gPSEnableData=(data.gData.gPSEnable==="Y"?true:false);
     		
-            $scope.items = data.eventList;
+            	$scope.items = data.eventList;
+
         })
         .error(function (data, status, header, config) {
             $scope.ResponseDetails = "Data: " + data +
@@ -159,10 +160,10 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 				warningScanLimit: $scope.warningScanLimit,
 				maxUploadSize: $scope.maxUploadSize,
 				uploadSleepInterval: $scope.uploadSleepInterval,
-				jobCreate: $scope.jobCreate,
+				jobCreate: ($scope.jobCreate===true?"Y":"N"),
 				deliveryTimeDuration: $scope.deliveryTimeDuration,
-				validateMessenger: $scope.validateMessenger,
-				gPSEnable: $scope.gPSEnable
+				validateMessenger: ($scope.validateMessenger===true?"Y":"N"),
+				gPSEnable: ($scope.gPSEnableData===true?"Y":"N")
 	            };
 			gData=JSON.stringify(gData);
 			var config = {
@@ -190,11 +191,11 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 		$scope.typeModal="";
 		$scope.codeModal="";
 		$scope.descriptionModal="";
-		$scope.signatureModel="";
-		$scope.additionalTextModel="";
+		$scope.signatureModel=false;
+		$scope.additionalTextModel=false;
 		$scope.LbAdditionalTextModel="";
-		$scope.mnAdditionalTextModel="";
-		$scope.rqShelfmarkModel="";
+		$scope.mnAdditionalTextModel=false;
+		$scope.rqShelfmarkModel=false;
 		$('#btnAdd').prop('title', 'save');
 		$('#btnAdd').text('Add');
 	}
@@ -205,11 +206,11 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 			code: $scope.codeModal,
 			systemCode: "tt",
 			description: $scope.descriptionModal,
-			rqSignature: $scope.signatureModel,
-			rqAdditionalText: $scope.additionalTextModel,
-			rqShelfmark: $scope.rqShelfmarkModel,
+			rqSignature: ($scope.signatureModel===true?"Y":"N"),
+			rqAdditionalText: ($scope.additionalTextModel===true?"Y":"N"),
+			rqShelfmark: ($scope.rqShelfmarkModel===true?"Y":"N"),
 			lbAdditionalText: $scope.LbAdditionalTextModel,
-			mnAdditionalText: $scope.mnAdditionalTextModel
+			mnAdditionalText: ($scope.mnAdditionalTextModel===true?"Y":"N")
             };
 		eData=JSON.stringify(eData);
 		var config = {
@@ -248,10 +249,10 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 		$scope.typeModal="";
 		$scope.codeModal="";
 		$scope.descriptionModal="";
-		$scope.signatureModel="";
-		$scope.additionalTextModel="";
-		$scope.mnAdditionalTextModel="";
-		$scope.rqShelfmarkModel="";
+		$scope.signatureModel=false;
+		$scope.additionalTextModel=false;
+		$scope.mnAdditionalTextModel=false;
+		$scope.rqShelfmarkModel=false;
 		$scope.LbAdditionalTextModel="";
 		
 	}
@@ -261,11 +262,11 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 		$scope.typeModal=log.type;
 		$scope.codeModal=log.code;
 		$scope.descriptionModal=log.description;
-		$scope.signatureModel=log.rqSignature;;
-		$scope.additionalTextModel=log.rqAdditionalText;
+		$scope.signatureModel=(log.rqSignature==="Y"?true:false);
+		$scope.additionalTextModel=(log.rqAdditionalText==="Y"?true:false);
 		$scope.LbAdditionalTextModel=log.lbAdditionalText;
-		$scope.mnAdditionalTextModel=log.mnAdditionalText;
-		$scope.rqShelfmarkModel=log.rqShelfmark;
+		$scope.mnAdditionalTextModel=(log.mnAdditionalText==="Y"?true:false);
+		$scope.rqShelfmarkModel=(log.rqShelfmark==="Y"?true:false);
 		$('#btnAdd').prop('title', 'Update');
 		$('#btnAdd').text('Update');
 	    $("#myModalHorizontal").modal();
