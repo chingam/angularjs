@@ -93,6 +93,21 @@ public class INIConfigController {
 	
 	
 	
+	@RequestMapping(value="/fetch/clear", method = RequestMethod.GET)
+	public HashMap<String, Object> getClear() {
+		HashMap<String, Object> response=new HashMap<String, Object>();
+		try {
+			eventDatas.clear();
+		} catch (Exception e) {
+			logger.error("Failed to prepare data for report");
+		}
+		return null;
+	}
+	
+	
+	
+	
+	
 
 	@RequestMapping(value="/fetch/system/{systemCode}", method = RequestMethod.GET)
 	@ApiOperation(tags="Event Logs", value="Site Code", notes="Get device upload logs")
@@ -100,6 +115,7 @@ public class INIConfigController {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		try {
 			if (systemCode != null) {
+				eventDatas.clear();
 				response.put("gData", generalLogService.findByCode(systemCode));
 				eventDatas=eventLogService.findAllBySystemCode(systemCode);
 				response.put("eventList", eventDatas);

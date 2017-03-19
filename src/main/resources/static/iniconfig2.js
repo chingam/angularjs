@@ -65,8 +65,21 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 	
 	//###################################################
 	
+	var GetClear = function () {
+        $http.get('/fetch/clear')
+        .success(function (data, status, headers, config) {
+            $scope.items = data;
+        })
+        .error(function (data, status, header, config) {
+            $scope.ResponseDetails = "Data: " + data +
+                "<br />status: " + status +
+                "<br />headers: " + jsonFilter(header) +
+                "<br />config: " + jsonFilter(config);
+        });
+    };
 	
-	
+    
+    GetClear();
 	
 	
 	
@@ -178,6 +191,7 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 	            $scope.PostDataResponse = data;
 	            alert(data.message);
 	            $scope.resetForm();
+	            GetClear();
 	            
 	        })
 	        .error(function (data, status, header, config) {
@@ -288,7 +302,11 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 	
 	
 	
-	
+
+	$scope.reset = function() {
+						$scope.resetForm();
+						GetClear();
+					};
 
 	
 
