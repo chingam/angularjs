@@ -5,20 +5,38 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 
 @Entity
+@IdClass(MyKey.class)
 public class EventLog implements Serializable {
 
 
 	private static final long serialVersionUID = -2596381502814446253L;
 	
+	public EventLog(String code, String systemCode, String type, String description, String rqSignature,
+			String rqAdditionalText, String rqShelfmark, String lbAdditionalText, String mnAdditionalText) {
+		super();
+		this.code = code;
+		this.systemCode = systemCode;
+		this.type = type;
+		this.description = description;
+		this.rqSignature = rqSignature;
+		this.rqAdditionalText = rqAdditionalText;
+		this.rqShelfmark = rqShelfmark;
+		this.lbAdditionalText = lbAdditionalText;
+		this.mnAdditionalText = mnAdditionalText;
+	}
+	public EventLog() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Id
 	@Column(name ="code")
 	private String code;
 	
-	@Column
-	private Integer id;
-	
+	@Id
 	@Column
 	private String systemCode;
 	
@@ -43,13 +61,6 @@ public class EventLog implements Serializable {
 	@Column
 	private String mnAdditionalText;
 	
-	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
 	public String getType() {
 		return type;
 	}

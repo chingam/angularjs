@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Device Log Report Screen</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+		<link href="webjars/ng-table/ng-table.min.css" rel="stylesheet" media="screen"/>
+<!-- 		<link href="webjars/angular-chart.js/angular-chart.min.css" rel="stylesheet" media="screen"/> -->
+
+		<script src="webjars/jquery/jquery.min.js"></script>
+		<script src="webjars/bootstrap/js/bootstrap.min.js"></script>
+		<script src="webjars/angular/angular.min.js"></script>
+		<script src="webjars/ng-table/ng-table.min.js"></script>
+		<script src="webjars/angular-sanitize/angular-sanitize.min.js"></script>
+		<script src="webjars/ng-csv/ng-csv.min.js"></script>
+		<script src="webjars/chartjs/Chart.js"></script>
+		<script src="webjars/angular-chart.js/angular-chart.min.js"></script>
+		<script src="sites.js" type="text/javascript"></script>
+		
+	<style type="text/css">
+	.green{
+		color: green;
+		display: table-cell;
+		}
+	.ng-table th {
+    text-align: left !important;
+	}
+
+	</style>	
+		
+	</head>
+
+	<body ng-app="mtrak" style="padding-top: 80px;">
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+						aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#" style="padding-top: 5px;"><span style="padding-right: 5px;"><img style="height: 40px; width: auto;" alt="Brand" src="mTrak.ico"/></span>Device Usage Report</a>
+				</div>
+			</div>
+		</nav>
+		<div class="container" ng-controller="sitesController">
+			<div class="col-md-12">
+				
+
+			</div>
+			<div id="content">
+				<ul id="tabs" class="nav nav-tabs col-md-12" data-tabs="tabs">
+					<li role="presentation" class="active"><a href="#table" data-toggle="tab">Table</a></li>
+				</ul>
+				<div id="my-tab-content" class="tab-content">
+					<div id="table" class="col-md-12 tab-pane active" style="padding-top: 20px;">
+						<table ng-table="logsTable" class="table table-striped">
+							<tr ng-repeat="log in data">
+								<td data-title="csv_headers[0]" sortable="'code'">{{log.code}}</td>
+								<td data-title="csv_headers[1]" sortable="'description'">{{log.description}}</td>
+								<td data-title="'Type'" sortable="'type'">{{log.type}}</td>
+								<td data-title="'Email'" sortable="'email'">{{log.email}}</td>
+								<td data-title="'JobCreate'" ng-class="{'green glyphicon glyphicon-ok': (log.jobCreate == 'Y')}"></td>
+								<td data-title="'Validate Messenger'" header-class="text-center" ng-class="{'green glyphicon glyphicon-ok': (log.validateMessenger == 'Y')}"></td>
+								<td data-title="'GPS'" ng-class="{'green glyphicon glyphicon-ok': (log.gPSEnable == 'Y')}"></td>
+								<td style="text-align: right">
+								<button class="btn btn-info btn-sm" ng-click="edit(log)"><span class="glyphicon glyphicon-duplicate"></span></button>
+								<button class="btn btn-danger btn-sm" ng-click="deleteData(log)"><span class="glyphicon glyphicon-trash"></span></button>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

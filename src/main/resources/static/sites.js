@@ -1,0 +1,86 @@
+angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
+.controller('sitesController', function ($scope, $filter, $http, ngTableParams) {
+	var dt = new Date();
+	dt.setDate(1); // setting first day to avoid complexity on leap year and month duration issues
+	$scope.current = dt;
+	
+	$scope.chart_labels = [];
+	$scope.chart_data = [];
+	
+	load(function(){
+		$scope.logsTable = new ngTableParams({
+			page : 1,
+			count : 10
+		}, {
+			total : $scope.logs.length,
+			getData : function($defer, params) {
+				$scope.data = $scope.logs.slice((params.page() - 1) * params.count(), params.page() * params.count());
+				$defer.resolve($scope.data);
+				
+			}
+		});
+	});
+
+	function load(callback) {
+		$http.get('/sites/it5555')
+        .success(function (data, status, headers, config) {
+        	$scope.logs = data;
+        	if (callback) callback();
+        })
+        .error(function (data, status, header, config) {
+            $scope.ResponseDetails = data
+            });
+		
+	}
+
+	$scope.reload = function() {
+		load(function(){
+			$scope.logsTable.page(1);
+			$scope.logsTable.total($scope.logs.length);
+			$scope.logsTable.reload();
+		});
+	}
+
+	$scope.showNext = function() {
+		var thm = new Date();
+		return ($scope.current.getFullYear() < thm.getFullYear() || $scope.current.getMonth() < thm.getMonth());
+	}
+	
+	$scope.loadMonth = function(mnth) {
+		$scope.current.setMonth($scope.current.getMonth() + mnth);
+		$scope.reload();
+	}
+	
+	function populateChart() {
+		var lbls = [], dts = [];
+		angular.forEach($scope.dttosw, function(it){
+			lbls.push(it.site + " : " + it.device);
+			dts.push(it.count);
+		});
+		$scope.chart_labels = lbls;
+		$scope.chart_data = dts;
+	}
+	
+	var $chart;
+	$scope.$on("create", function (event, chart) {
+		if (typeof $chart !== "undefined") {
+			$chart.destroy();
+		}
+		$chart = chart;
+	});
+	
+
+	$scope.chart_options = {
+		tooltipTemplate : function(label) {
+			return label.label + ' : ' + label.value;
+		}
+	}
+	
+	$scope.csv_headers = ["Site Code", "Site Name", "Device ID", "Last Used", "Last Used By", "Count"];
+	
+	$scope.filterSite = function() {
+		$scope.logsTable.reload();
+	}
+	
+	$scope.selectedSite = "";
+});

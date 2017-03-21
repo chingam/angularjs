@@ -59,28 +59,19 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 	public GeneralLog save(GeneralLog obj, ArrayList<EventLog> eventDatas) {
 		// TODO Auto-generated method stub
 		GeneralLog generalLog = null;
-		Integer id=0;
 		for (EventLog eventLog2 : eventDatas) {
 			EventLog event=eventLogRepo.findByCodeAndSystemCode(eventLog2.getCode(), obj.getCode());
 			if(event!=null){
 				eventLogRepo.deleteAllBySystemCode(obj.getCode());
 			}
 			if(obj.getCode()!=null){
-				id++;
 				eventLog2.setSystemCode(obj.getCode());
-				eventLog2.setId(id);
 				generalLog=generalLogRepo.save(obj);
 				eventLogRepo.save(eventLog2);
 			}
 		}
-		if(dragAndDrops!=null){
-			for (DragAndDrop dragAndDrop : dragAndDrops) {
-				eventHql.updateDragAndDrop(dragAndDrop.getCode(), dragAndDrop.getId());
-			}
-			
-		}
 		
-		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByIdAsc(obj.getCode()));
+		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
 		eventDatas=null;
 		return generalLog;
 	}
@@ -101,6 +92,13 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 	@Override
 	public void updateByCode(ArrayList<DragAndDrop> dragAndDrops) {
 		this.dragAndDrops=dragAndDrops;
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public List<GeneralLog> findByCodeLikeOrderByCode(String code) {
+		// TODO Auto-generated method stub
+		return generalLogRepo.findByCodeContaining(code);
 	}
 
 	

@@ -14,8 +14,26 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 	
 	//###################################################
 	
+	$scope.refresh = function() {
+		console.log("reset Call..");
+		getClear();
+		$scope.resetForm();
+	};
 	
 	
+	var getClear = function () {
+		$http.get('/fetch/clear')
+        .success(function (data, status, headers, config) {
+            $scope.message = data;
+        })
+        .error(function (data, status, header, config) {
+            $scope.ResponseDetails = data
+            });
+
+    };
+	
+    
+    getClear();
 	
 	
 	
@@ -56,6 +74,7 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 		$scope.mnAdditionalTextModel=false;
 		$scope.rqShelfmarkModel=false;
 		$('#btnAdd').prop('title', 'save');
+		$('.nav-tabs a[href="#SystemTableOne"]').tab('show');
 	}
 	
 	$scope.searching=function(){
@@ -82,6 +101,7 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
     		
             	$scope.items = data.eventList;
             	$("#code").prop('disabled', true);
+            	$('.nav-tabs a[href="#SystemTableOne"]').tab('show');
 
         })
         .error(function (data, status, header, config) {
@@ -128,7 +148,7 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 	            alert(data.message);
 	            $("#code").prop('disabled', false);
 	            $scope.resetForm();
-	            GetClear();
+	            getClear();
 	            
 	        })
 	        .error(function (data, status, header, config) {

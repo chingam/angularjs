@@ -66,7 +66,7 @@ $(document).ready(function(){
 				
 				<div class="panel panel-default">
 					<div class="panel-heading clearfix">
-			            <h4 class="panel-title pull-left" style="padding-top: 7.5px;">INI File Configuration</h4>
+			            <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{description}}</h4>
 			                <div class="input-group col-md-3 pull-right">
 			                    <input type="text" ng-model="searchModel" typeahead="item for item in mtrackCodes | filter:$viewValue | limitTo:8" class="form-control" placeholder="Search">
 			                    
@@ -124,11 +124,26 @@ $(document).ready(function(){
 							 </div>
 							 
 							 <div class="col-md-offset-4">
-							 	<label class="control-label">JobCreate :</label>
-							 	<label class="checkbox inline col-sm-4">  
-								 <input type="checkbox" ng-model="jobCreate" value="option1"> Yes
-								</label>
-							</div>
+								<div class="form-group">
+									<div class="col-sm-3">
+										 <input type="checkbox" ng-model="jobCreate" />
+										 <strong>JobCreate Yes</strong>
+									</div>
+									
+									<div class="col-sm-3">
+										<input type="checkbox" ng-model="gPSEnableData" />
+										<strong>GPSEnable Yes</strong>
+									</div>
+									<div class="col-sm-4">
+										 <input type="checkbox" ng-model="validateMessenger" />
+										 <strong>ValidateMessenger Yes</strong>
+									</div>
+									
+								</div>
+							 </div>
+							 
+							 
+							
 							 
 							 
 						   </div>
@@ -247,7 +262,7 @@ $(document).ready(function(){
 						<h3 class="panel-title pull-left">Event Details</h3>
 						<div class="pull-right">
 							<button class="btn btn-primary" ng-click="addNew()" data-toggle="modal" data-target="#myModalHorizontal"><i class="glyphicon glyphicon-plus"></i>Add</button>
-							<button class="btn btn-primary" ng-click="reset()"><i class="glyphicon glyphicon-refresh"></i>Refresh</button>
+							<button class="btn btn-primary" ng-click="refresh()"><i class="glyphicon glyphicon-refresh"></i>Refresh</button>
 						</div>
 					</div>
 					<table id="logTableId" class="table table-striped">
@@ -256,11 +271,11 @@ $(document).ready(function(){
 								<th>Type</th>
 								<th>Code</th>
 								<th>Description</th>
+								<th>LBAdditionalText</th>
 								<th>Signature</th>
-								<th>AdditionalText</th>
+								<th>RQAdditionalText</th>
 								<th>Shelfmark</th>
-								<th>AdditionalText</th>
-								<th>AdditionalText</th>
+								<th>MNAdditionalText</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -268,10 +283,10 @@ $(document).ready(function(){
 								<td>{{log.type}}</td>
 								<td>{{log.code}}</td>
 								<td>{{log.description}}</td>
+								<td>{{log.lbAdditionalText}}</td>
 								<td ng-class="{'green glyphicon glyphicon-ok': (log.rqSignature == 'Y')}"></td>
 								<td ng-class="{'green glyphicon glyphicon-ok': (log.rqAdditionalText == 'Y')}"></td>
 								<td ng-class="{'green glyphicon glyphicon-ok': (log.rqShelfmark == 'Y')}"></td>
-								<td ng-class="{'green glyphicon glyphicon-ok': (log.lbAdditionalText == 'Y')}"></td>
 								<td ng-class="{'green glyphicon glyphicon-ok': (log.mnAdditionalText == 'Y')}"></td>
 								<td>
 								<button class="btn btn-info btn-sm" ng-click="edit(log)"><span class="glyphicon glyphicon-edit"></span></button>
@@ -324,27 +339,27 @@ $(document).ready(function(){
 				</div>
 				<div class="row">
 					<div class="col-md-12">
-						<label for="txtLbAdditionalText" class="control-label">LbAdditional Test</label><br />
+						<label for="txtLbAdditionalText" class="control-label">Additional Test</label><br />
 						<input class="form-control" ng-model="LbAdditionalTextModel" id="txtLbAdditionalText" />
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6">
-		    			  RqSignature : 
+		    			  Signature Yes 
 						  <input type="checkbox" ng-model="signatureModel">
 	  				</div>
 	  				<div class="col-md-6">
-		    			  RqAdditionalText : 
+		    			  RQAdditionalText Yes 
 						  <input type="checkbox" ng-model="additionalTextModel">
 	  				</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6">
-		    			  RqShelfmark : 
+		    			  Shelfmark Yes 
 						  <input type="checkbox" ng-model="rqShelfmarkModel">
 	  				</div>
 	  				<div class="col-md-6">
-		    			  MnAdditionalText : 
+		    			  MNAdditionalText Yes 
 						  <input type="checkbox" ng-model="mnAdditionalTextModel">
 	  				</div>
 				</div>

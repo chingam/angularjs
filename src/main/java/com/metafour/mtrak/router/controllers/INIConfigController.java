@@ -97,11 +97,15 @@ public class INIConfigController {
 	public HashMap<String, Object> getClear() {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		try {
-			eventDatas.clear();
+			if(!eventDatas.isEmpty()){
+				eventDatas.clear();
+				System.out.println("clean success");
+			}
+			response.put("message", "success");
 		} catch (Exception e) {
-			logger.error("Failed to prepare data for report");
+			logger.error("Failed to clean");
 		}
-		return null;
+		return response;
 	}
 	
 	

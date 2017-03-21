@@ -15,7 +15,7 @@ import com.metafour.mtrak.router.entities.EventLog;
 public interface EventLogRepo extends CrudRepository<EventLog, Long> {
 
 	EventLog findByCodeAndSystemCode(String code, String systemCode);
-	ArrayList<EventLog> findAllBySystemCodeOrderByIdAsc(String systemCode);
+	ArrayList<EventLog> findAllBySystemCodeOrderByCode(String systemCode);
 	void deleteAllBySystemCode(String systemCode);
 	
 	
