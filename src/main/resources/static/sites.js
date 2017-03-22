@@ -14,6 +14,7 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 		}, {
 			total : $scope.logs.length,
 			getData : function($defer, params) {
+				$scope.data = params.filter() ? $filter('filter')($scope.data, params.filter()) : $scope.data;
 				$scope.data = $scope.logs.slice((params.page() - 1) * params.count(), params.page() * params.count());
 				$defer.resolve($scope.data);
 				

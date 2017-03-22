@@ -57,10 +57,10 @@
 				</ul>
 				<div id="my-tab-content" class="tab-content">
 					<div id="table" class="col-md-12 tab-pane active" style="padding-top: 20px;">
-						<table ng-table="logsTable" class="table table-striped">
+						<table ng-table="logsTable" show-filter="true" class="table table-striped">
 							<tr ng-repeat="log in data">
-								<td data-title="csv_headers[0]" sortable="'code'">{{log.code}}</td>
-								<td data-title="csv_headers[1]" sortable="'description'">{{log.description}}</td>
+								<td data-title="'Site Code'" sortable="'code'" filter="{ 'code': 'text' }">{{log.code}}</td>
+								<td data-title="'Site Name'" sortable="'description'" filter="{ 'description': 'text' }">{{log.description}}</td>
 								<td data-title="'Type'" sortable="'type'">{{log.type}}</td>
 								<td data-title="'Email'" sortable="'email'">{{log.email}}</td>
 								<td data-title="'JobCreate'" ng-class="{'green glyphicon glyphicon-ok': (log.jobCreate == 'Y')}"></td>

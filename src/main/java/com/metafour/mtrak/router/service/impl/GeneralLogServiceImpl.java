@@ -101,6 +101,12 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 		return generalLogRepo.findByCodeContaining(code);
 	}
 
+	@Override
+	public List<GeneralLog> findAll() {
+		// TODO Auto-generated method stub
+		return generalLogRepo.findAll();
+	}
+
 	
 
 }

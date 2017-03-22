@@ -20,4 +20,5 @@ public interface GeneralLogService {
 	void delete(GeneralLog obj);
 	void updateByCode(ArrayList<DragAndDrop> dragAndDrops);
 	List<GeneralLog> findByCodeLikeOrderByCode(String code);
+	List<GeneralLog> findAll();
 }

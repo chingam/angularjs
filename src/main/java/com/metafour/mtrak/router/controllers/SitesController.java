@@ -32,6 +32,6 @@ public class SitesController {
 		} catch (Exception e) {
 			logger.error("Failed to prepare data for report");
 		}
-		return generalLogService.findByCodeLikeOrderByCode(code);
+		return generalLogService.findAll();
 	}
 }

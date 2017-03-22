@@ -17,4 +17,5 @@ public interface GeneralLogRepo extends CrudRepository<GeneralLog, Long> {
 	GeneralLog findByCode(String code);
 	List<GeneralLog> findAllByCode(String code);
 	List<GeneralLog> findByCodeContaining(String code);
+	List<GeneralLog> findAll();
 }
