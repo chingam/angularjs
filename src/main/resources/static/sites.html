@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Device Log Report Screen</title>
+		<title>Site Screen</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
 		<link href="webjars/ng-table/ng-table.min.css" rel="stylesheet" media="screen"/>
@@ -27,6 +27,8 @@
     text-align: left !important;
 	}
 
+
+
 	</style>	
 		
 	</head>
@@ -42,7 +44,7 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#" style="padding-top: 5px;"><span style="padding-right: 5px;"><img style="height: 40px; width: auto;" alt="Brand" src="mTrak.ico"/></span>Device Usage Report</a>
+					<a class="navbar-brand" href="#" style="padding-top: 5px;"><span style="padding-right: 5px;"><img style="height: 40px; width: auto;" alt="Brand" src="mTrak.ico"/></span>Site Screen</a>
 				</div>
 			</div>
 		</nav>
@@ -63,11 +65,11 @@
 								<td data-title="'Site Name'" sortable="'description'" filter="{ 'description': 'text' }">{{log.description}}</td>
 								<td data-title="'Type'" sortable="'type'">{{log.type}}</td>
 								<td data-title="'Email'" sortable="'email'">{{log.email}}</td>
-								<td data-title="'JobCreate'" ng-class="{'green glyphicon glyphicon-ok': (log.jobCreate == 'Y')}"></td>
 								<td data-title="'Validate Messenger'" header-class="text-center" ng-class="{'green glyphicon glyphicon-ok': (log.validateMessenger == 'Y')}"></td>
+								<td data-title="'JobCreate'" ng-class="{'green glyphicon glyphicon-ok': (log.jobCreate == 'Y')}"></td>
 								<td data-title="'GPS'" ng-class="{'green glyphicon glyphicon-ok': (log.gPSEnable == 'Y')}"></td>
 								<td style="text-align: right">
-								<button class="btn btn-info btn-sm" ng-click="edit(log)"><span class="glyphicon glyphicon-duplicate"></span></button>
+								<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModalHorizontal" ng-click="fetching(log)"><span class="glyphicon glyphicon-duplicate"></span></button>
 								<button class="btn btn-danger btn-sm" ng-click="deleteData(log)"><span class="glyphicon glyphicon-trash"></span></button>
 								</td>
 							</tr>
@@ -75,6 +77,242 @@
 					</div>
 				</div>
 			</div>
-		</div>
+			
+			
+			
+			
+			
+<!-- Start Modal -->
+
+
+<div data-backdrop="static" data-keyboard="false" class="modal fade col-md-12 bd-example-modal-lg" id="myModalHorizontal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+				<h4>{{description}}</h4>
+            </div>
+            
+            <!-- Modal Body -->
+            
+            <div class="modal-body">
+
+				<form name="myForm" class="form-horizontal" role="form">
+				
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">System Information</a></li>
+    <li><a data-toggle="tab" href="#menu1">General Information</a></li>
+    <li><a data-toggle="tab" href="#menu2">Data Information</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+ 				<div style="padding-top: 4px;">
+										<div class="form-group">
+											<label for="code" class="control-label col-sm-3">Code</label>
+											<div class="col-sm-6">
+													<input class="form-control" ng-model="code" name=code id="code" placeholder="Code" required/>
+											</div>
+										</div>
+							 </div>
+							 
+							 <div>
+										<div class="form-group">
+											<label for="txtEmail" class="control-label col-sm-3">Email</label>
+											<div class="col-sm-6">
+													<input class="form-control" ng-model="email" id="txtEmail" placeholder="Email" />
+											</div>
+										</div>
+							 </div>
+							 
+							  <div>
+										<div class="form-group">
+										<label for="txtDescription" class="control-label col-sm-3">Description</label>
+											<div class="col-sm-6">
+													<input class="form-control" ng-model="description" id="txtDescription" placeholder="Description" />
+											</div>
+										</div>
+							 </div>
+							 
+							 <div>
+										<div class="form-group">
+										<label for="txtType" class="control-label col-sm-3">Type</label>
+											<div class="col-sm-6">
+													<input class="form-control" ng-model="type" id="txtType" placeholder="Type" />
+											</div>
+										</div>
+							 </div>
+							 
+							 <div>
+								<div class="form-group">
+									<div class="col-sm-3">
+										 <input type="checkbox" ng-model="jobCreate" />
+										 <strong>JobCreate Yes</strong>
+									</div>
+									
+									<div class="col-sm-4">
+										<input type="checkbox" ng-model="gPSEnableData" />
+										<strong>GPSEnable Yes</strong>
+									</div>
+									<div class="col-sm-5">
+										 <input type="checkbox" ng-model="validateMessenger" />
+										 <strong>ValidateMessenger Yes</strong>
+									</div>
+									
+								</div>
+							 </div>
+   <!-- end first tabs -->
+    </div>
+    
+    
+    
+    
+    
+    <div id="menu1" class="tab-pane fade">
+    	
+    	<div style="padding-top: 4px;">
+							     		<div class="form-group">
+											<label for="txtLogo" class="control-label col-sm-3">Logo</label>
+											<div class="col-sm-6">
+													<input class="form-control" ng-model="logo" id="txtLogo" placeholder="Logo Url" />
+											</div>
+										</div>
+								 </div>
+								 
+								 <div>
+									<div class="form-group">
+											<label for="txtVersionFile" class="control-label col-sm-3">VersionFile</label>
+											<div class="col-sm-6">
+													<input class="form-control" ng-model="versionFileUrl" id="txtVersionFile" placeholder="VersionFile Url" />
+											</div>
+									</div>
+								 </div>
+								 
+								 <div>
+									<div class="form-group">
+											<label for="txtUploadURL" class="control-label col-sm-3">UploadURL</label>
+											<div class="col-sm-6">
+													<input class="form-control" ng-model="uploadURL" id="txtUploadURL" placeholder="UploadURL" />
+											</div>
+									</div>
+								 </div>
+								 
+								 <div>
+									<div class="form-group">
+											<label for="txtProcessURL" class="control-label col-sm-3">ProcessURL</label>
+											<div class="col-sm-6">
+													<input class="form-control" ng-model="processURL" id="txtProcessURL" placeholder="ProcessURL" />
+											</div>
+									</div>
+								 </div>
+								 
+								 <div>
+									<div class="form-group">
+											<label for="txtUploadPath" class="control-label col-sm-3">UploadPath</label>
+											<div class="col-sm-6">
+													<input class="form-control" ng-model="uploadPath" id="txtUploadPath" placeholder="UploadPath" />
+											</div>
+									</div>
+								 </div>
+    	
+    	
+    	<!-- end 2nd tab  -->
+    </div>
+    <div id="menu2" class="tab-pane fade">
+    
+							      <div class="col-md-offset-2" style="padding-top: 4px;">
+											<div class="form-group">
+												<label for="txtMaxUploadSize" class="control-label col-sm-3">MaxUploadSize</label>
+												<div class="col-sm-6">
+														<input class="form-control" type="number" min="0" step="1" ng-model="maxUploadSize" id="txtMaxUploadSize" placeholder="MaxUploadSize" />
+												</div>
+											</div>
+								 </div>
+								 
+								 <div class="col-md-offset-2">
+										<div class="form-group">
+											<label for="txtUploadSleepInterval" class="control-label col-sm-3">UploadSleepInterval</label>
+											<div class="col-sm-6">
+													<input class="form-control" type="number" min="0" step="1" ng-model="uploadSleepInterval" id="txtUploadSleepInterval" placeholder="UploadSleepInterval" />
+											</div>
+										</div>
+								 </div>
+								 
+								 <div class="col-md-offset-2">
+										<div class="form-group">
+										<label for="txtDataCheckInterval" class="control-label col-sm-3">DataCheckInterval</label>
+											<div class="col-sm-6">
+													<input class="form-control" type="number" min="0" step="1" ng-model="dataCheckInterval" id="txtDataCheckInterval" placeholder="DataCheckInterval" />
+											</div>
+										</div>
+								 </div>
+								 
+								 <div class="col-md-offset-2">
+										<div class="form-group">
+										<label for="txtBlockScanLimit" class="control-label col-sm-3">BlockScanLimit</label>
+											<div class="col-sm-6">
+													<input class="form-control" type="number" min="0" step="1" ng-model="blockScanLimit" id="txtBlockScanLimit" placeholder="BlockScanLimit" />
+											</div>
+										</div>
+								 </div>
+								 <div class="col-md-offset-2">
+										<div class="form-group">
+										<label for="txtWarningScanLimit" class="control-label col-sm-3">WarningScanLimit</label>
+											<div class="col-sm-6">
+													<input class="form-control" type="number" min="0" step="1" ng-model="warningScanLimit" id="txtWarningScanLimit" placeholder="WarningScanLimit" />
+											</div>
+										</div>
+								 </div>
+								 <div class="col-md-offset-2">
+										<div class="form-group">
+										<label for="txtDeliveryTimeDuration" class="control-label col-sm-3">DeliveryTimeDuration</label>
+											<div class="col-sm-6">
+													<input class="form-control" type="number" min="0" step="1" ng-model="deliveryTimeDuration" id="txtDeliveryTimeDuration" placeholder="DeliveryTimeDuration" />
+											</div>
+										</div>
+								 </div>
+								 
+
+    <!-- end 3rd tab -->
+    
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+  </div>
+				
+				
+				</form>
+				
+            
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- end Modal -->
+
+
+
+
+
+
+
+
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	</body>
 </html>

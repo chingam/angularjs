@@ -7,6 +7,44 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 	$scope.chart_labels = [];
 	$scope.chart_data = [];
 	
+	
+	$scope.fetching=function(log){
+		$http.get('/fetch/system/'+log.code)
+        .success(function (data, status, headers, config) {
+        	$scope.logo=data.gData.logo;
+    		$scope.versionFileUrl=data.gData.versionFileUrl;
+    		$scope.code=data.gData.code+"-Copy";
+    		$scope.description=data.gData.description;
+    		$scope.type=data.gData.type;
+    		$scope.email=data.gData.email;
+    		$scope.uploadURL=data.gData.uploadURL;
+    		$scope.uploadPath=data.gData.uploadPath;
+    		$scope.processURL=data.gData.processURL;
+    		$scope.dataCheckInterval=data.gData.dataCheckInterval;
+    		$scope.blockScanLimit=data.gData.blockScanLimit;
+    		$scope.warningScanLimit=data.gData.warningScanLimit;
+    		$scope.maxUploadSize=data.gData.maxUploadSize;
+    		$scope.uploadSleepInterval=data.gData.uploadSleepInterval;
+    		$scope.jobCreate=(data.gData.jobCreate==="Y"?true:false);
+    		$scope.deliveryTimeDuration=data.gData.deliveryTimeDuration;
+    		$scope.validateMessenger=(data.gData.validateMessenger=="Y"?true:false);
+    		$scope.gPSEnableData=(data.gData.gPSEnable==="Y"?true:false);
+    			
+    			$scope.items = data.eventList;
+    			console.log($scope.items.length);
+            	$('.nav-tabs a[href="#home"]').tab('show');
+
+        })
+        .error(function (data, status, header, config) {
+            $scope.ResponseDetails = "Data: " + data +
+                "<br />status: " + status +
+                "<br />headers: " + jsonFilter(header) +
+                "<br />config: " + jsonFilter(config);
+        });
+	}
+	
+	
+	
 	load(function(){
 		$scope.logsTable = new ngTableParams({
 			page : 1,
