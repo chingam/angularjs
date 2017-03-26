@@ -7,6 +7,42 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 	$scope.chart_labels = [];
 	$scope.chart_data = [];
 	
+	$scope.edit=function(log){
+		$http.get('/fetch/system/'+log.code)
+        .success(function (data, status, headers, config) {
+        	$scope.logo=data.gData.logo;
+    		$scope.versionFileUrl=data.gData.versionFileUrl;
+    		$scope.code=data.gData.code;
+    		$scope.description=data.gData.description;
+    		$scope.type=data.gData.type;
+    		$scope.email=data.gData.email;
+    		$scope.uploadURL=data.gData.uploadURL;
+    		$scope.uploadPath=data.gData.uploadPath;
+    		$scope.processURL=data.gData.processURL;
+    		$scope.dataCheckInterval=data.gData.dataCheckInterval;
+    		$scope.blockScanLimit=data.gData.blockScanLimit;
+    		$scope.warningScanLimit=data.gData.warningScanLimit;
+    		$scope.maxUploadSize=data.gData.maxUploadSize;
+    		$scope.uploadSleepInterval=data.gData.uploadSleepInterval;
+    		$scope.jobCreate=(data.gData.jobCreate==="Y"?true:false);
+    		$scope.deliveryTimeDuration=data.gData.deliveryTimeDuration;
+    		$scope.validateMessenger=(data.gData.validateMessenger=="Y"?true:false);
+    		$scope.gPSEnableData=(data.gData.gPSEnable==="Y"?true:false);
+    		
+            	$scope.items = data.eventList;
+            	$("#code").prop('disabled', true);
+            	$('.nav-tabs a[href="#SystemTableOne"]').tab('show');
+            	window.location.href = '/iniconfig6.html';
+
+        })
+        .error(function (data, status, header, config) {
+            $scope.ResponseDetails = "Data: " + data +
+                "<br />status: " + status +
+                "<br />headers: " + jsonFilter(header) +
+                "<br />config: " + jsonFilter(config);
+        });
+	}
+	
 	
 	$scope.fetching=function(log){
 		$http.get('/fetch/system/'+log.code)
@@ -52,8 +88,16 @@ angular.module('mtrak', ['ngTable', 'ngSanitize', 'ngCsv', 'chart.js'])
 		}, {
 			total : $scope.logs.length,
 			getData : function($defer, params) {
-				$scope.data = params.filter() ? $filter('filter')($scope.data, params.filter()) : $scope.data;
-				$scope.data = $scope.logs.slice((params.page() - 1) * params.count(), params.page() * params.count());
+				var dttosw = params.sorting() ? $filter('orderBy')($scope.logs, params.orderBy()) : $scope.logs;
+				if ($scope.selectedSite !== "") {
+					params.filter().site = $scope.selectedSite;
+				} else if (params.filter().hasOwnProperty('site')) {
+					delete params.filter().site;
+				}
+				dttosw = params.filter() ? $filter('filter')(dttosw, params.filter()) : dttosw;
+				$scope.data = dttosw.slice((params.page() - 1) * params.count(), params.page() * params.count());
+				params.total(dttosw.length);
+				$scope.dttosw = dttosw;
 				$defer.resolve($scope.data);
 				
 			}

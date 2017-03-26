@@ -39,6 +39,36 @@ public class INIConfigController {
 	@Autowired
 	GeneralLogService generalLogService;
 	
+	String code="";
+	@RequestMapping(value="/cache/{code}", method = RequestMethod.GET)
+	public HashMap<String, Object> cacheData(@PathVariable String code) {
+		HashMap<String, Object> response=new HashMap<String, Object>();
+		if(code!=null){
+			this.code=code;
+			response.put("message", "success");
+		}else{
+			response.put("message", "fail");
+		}
+		return response;
+	}
+	
+	
+	
+	@RequestMapping(value="/getCache", method = RequestMethod.GET)
+	public HashMap<String, Object> getCacheData() {
+		HashMap<String, Object> response=new HashMap<String, Object>();
+		if(this.code!=null && !this.code.equalsIgnoreCase("")){
+			response.put("message", this.code);
+			this.code="";
+		}else{
+			response.put("message", "fail");
+		}
+		return response;
+	}
+	
+	
+	
+	
 	GeneralLog cacheData;
 	@RequestMapping(value="/generalConfig", method = RequestMethod.POST)
 	public HashMap<String, Object> generalDataSave(@RequestBody GeneralLog generalLog) {
@@ -97,11 +127,24 @@ public class INIConfigController {
 	public HashMap<String, Object> getClear() {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		try {
-			if(!eventDatas.isEmpty()){
-				eventDatas.clear();
-				System.out.println("clean success");
+			if(this.code.equalsIgnoreCase("")==Boolean.TRUE || this.code==null){
+				if(!eventDatas.isEmpty()){
+					eventDatas.clear();
+					
+					System.out.println("clean success");
+				}
+				response.put("message", "success");
+			}else{
+//				fetchByCode(this.code);
 			}
-			response.put("message", "success");
+			
+			
+			
+			
+			
+			
+			
+			
 		} catch (Exception e) {
 			logger.error("Failed to clean");
 		}

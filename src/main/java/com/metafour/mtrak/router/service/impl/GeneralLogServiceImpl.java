@@ -51,7 +51,14 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 	@Override
 	@Transactional
 	public void delete(GeneralLog obj) {
-		generalLogRepo.delete(obj);
+		if(obj!=null){
+			generalLogRepo.delete(obj);
+			ArrayList<EventLog> events=eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode());
+			if(events.size()>0 && events!=null){
+				eventLogRepo.deleteAllBySystemCode(obj.getCode());
+			}
+		}
+	
 	}
 
 	@Override
@@ -59,21 +66,39 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 	public GeneralLog save(GeneralLog obj, ArrayList<EventLog> eventDatas) {
 		// TODO Auto-generated method stub
 		GeneralLog generalLog = null;
-		for (EventLog eventLog2 : eventDatas) {
-			EventLog event=eventLogRepo.findByCodeAndSystemCode(eventLog2.getCode(), obj.getCode());
-			if(event!=null){
+		if(obj.getCode()!=null){
+			generalLog=generalLogRepo.save(obj);
+			
+			if(eventDatas.size()>0 && eventDatas!=null && !eventDatas.isEmpty()){
 				eventLogRepo.deleteAllBySystemCode(obj.getCode());
-			}
-			if(obj.getCode()!=null){
-				eventLog2.setSystemCode(obj.getCode());
-				generalLog=generalLogRepo.save(obj);
-				eventLogRepo.save(eventLog2);
+				for (EventLog eventLog2 : eventDatas) {
+					eventLog2.setSystemCode(obj.getCode());
+					eventLogRepo.save(eventLog2);
+				}
 			}
 		}
-		
-		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
+		WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
 		eventDatas=null;
 		return generalLog;
+	}
+	
+	@Override
+	@Transactional
+	public GeneralLog copy(GeneralLog obj, ArrayList<EventLog> eventDatas) {
+		if(obj.getCode()!=null){
+			generalLogRepo.save(obj);
+			
+			if(eventDatas.size()>0 && eventDatas!=null && !eventDatas.isEmpty()){
+				for (EventLog eventLog2 : eventDatas) {
+					eventLog2.setSystemCode(obj.getCode());
+					eventLogRepo.save(eventLog2);
+				}
+			}
+		}
+	
+	WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
+	eventDatas=null;
+	return null;
 	}
 
 	@Override
