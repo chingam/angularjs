@@ -123,8 +123,8 @@ $(document).ready(function(){
 										<label for="txtType" class="control-label col-sm-3">Type</label>
 											<div class="col-md-6 col-sm-6">
 												<select id="departportlist" ng-model="type" class="include form-control">
-													<option value="iTrak">iTrak</option>
-													<option value="NetCurrier">NetCurrier</option>
+													<option value="itrak">itrak</option>
+													<option value="netcourier">netcourier</option>
 												</select>
 											</div>
 										</div>
@@ -135,13 +135,27 @@ $(document).ready(function(){
 													<input class="form-control" ng-model="email" id="txtEmail" placeholder="Email" />
 											</div>
 										</div>
+										<div class="form-group" style="padding-top: 4px;">
+											<label for="txtLogo" class="control-label col-sm-3">Logo</label>
+											<div class="col-md-6 col-sm-6">
+													<input class="form-control" ng-model="logo" id="txtLogo" placeholder="Logo Url" />
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<label for="txtVersionFile" class="control-label col-sm-3">VersionFile</label>
+											<div class="col-md-6 col-sm-6">
+													<input class="form-control" ng-model="versionFileUrl" id="txtVersionFile" placeholder="VersionFile Url" />
+											</div>
+										</div>
+										
 						    </div>
 							 
 						<div class="col-md-6">
 							 <div class="control-group">
 								<div class="controls">
 									<label class="checkbox">
-							            <input type="checkbox" class="include" ng-model="jobCreate" /> Allow to job create
+							            <input type="checkbox" class="include" ng-model="jobCreate" /> Allow to create job 
 							        </label>
 								</div>
 							</div>
@@ -149,7 +163,7 @@ $(document).ready(function(){
 							<div class="control-group">
 								<div class="controls">
 									<label class="checkbox">
-							            <input type="checkbox" class="include" ng-model="gPSEnableData"  /> Enabled to GPS
+							            <input type="checkbox" class="include" ng-model="gPSEnableData"  /> Enabled GPS
 							        </label>
 								</div>
 							</div>
@@ -157,7 +171,7 @@ $(document).ready(function(){
 							<div class="control-group">
 								<div class="controls">
 									<label class="checkbox">
-							            <input type="checkbox" class="include" ng-model="validateMessenger" /> ValidateMessenger
+							            <input type="checkbox" class="include" ng-model="validateMessenger" /> Validate messenger
 							        </label>
 								</div>
 							</div>
@@ -172,20 +186,6 @@ $(document).ready(function(){
 						    <div id="generalInfo" class="tab-pane fade">
 						    	<div class="col-md-12">
 						    		<div class="col-md-6">
-						    			<div class="form-group" style="padding-top: 4px;">
-											<label for="txtLogo" class="control-label col-sm-3">Logo</label>
-											<div class="col-md-6 col-sm-6">
-													<input class="form-control" ng-model="logo" id="txtLogo" placeholder="Logo Url" />
-											</div>
-										</div>
-										
-										<div class="form-group">
-											<label for="txtVersionFile" class="control-label col-sm-3">VersionFile</label>
-											<div class="col-md-6 col-sm-6">
-													<input class="form-control" ng-model="versionFileUrl" id="txtVersionFile" placeholder="VersionFile Url" />
-											</div>
-										</div>
-										
 										<div class="form-group">
 											<label for="txtUploadURL" class="control-label col-sm-3">UploadURL</label>
 											<div class="col-md-6 col-sm-6">
@@ -210,15 +210,16 @@ $(document).ready(function(){
 														<input class="form-control" type="number" min="0" step="1" ng-model="maxUploadSize" id="txtMaxUploadSize" placeholder="MaxUploadSize" />
 												</div>
 										</div>
-										
-						    		</div>
-						    		<div class="col-md-6">
 										<div class="form-group" style="padding-top: 4px;">
 											<label for="txtUploadSleepInterval" class="control-label col-sm-3">UploadSleepInterval</label>
 											<div class="col-md-6 col-sm-6">
 													<input class="form-control" type="number" min="0" step="1" ng-model="uploadSleepInterval" id="txtUploadSleepInterval" placeholder="UploadSleepInterval" />
 											</div>
 										</div>
+										
+						    		</div>
+						    		<div class="col-md-6">
+										
 										<div class="form-group">
 											<label for="txtDataCheckInterval" class="control-label col-sm-3">DataCheckInterval</label>
 											<div class="col-md-6 col-sm-6">
@@ -354,7 +355,7 @@ $(document).ready(function(){
 						<div class="col-md-9 col-sm-12" style="padding-left: 27px;">
 							<div class="controls">
 								<label class="checkbox">
-						            <input type="checkbox" class="include" ng-model="additionalTextModel" />Add to Addtional Text 
+						            <input type="checkbox" class="include" ng-model="additionalTextModel" />Add an additional text
 						        </label>
 							</div>
 						</div>
@@ -366,7 +367,7 @@ $(document).ready(function(){
 						<div class="col-md-9 col-sm-12" style="padding-left: 27px;">
 							<div class="controls">
 								<label class="checkbox">
-						            <input type="checkbox" class="include" ng-model="signatureModel" />Add to Signature 
+						            <input type="checkbox" class="include" ng-model="signatureModel" />Attach a signature 
 						        </label>
 							</div>
 						</div>
@@ -377,7 +378,7 @@ $(document).ready(function(){
 						<div class="col-md-9 col-sm-12" style="padding-left: 27px;">
 							<div class="controls">
 								<label class="checkbox">
-						            <input type="checkbox" class="include" ng-model="rqShelfmarkModel" />Add to Shelfmark 
+						            <input type="checkbox" class="include" ng-model="rqShelfmarkModel" />Shelfmark 
 						        </label>
 							</div>
 						</div>
@@ -388,7 +389,7 @@ $(document).ready(function(){
 						<div class="col-md-9 col-sm-12" style="padding-left: 27px;">
 							<div class="controls">
 								<label class="checkbox">
-						            <input type="checkbox" class="include" ng-model="mnAdditionalTextModel" />Add to AdditionalText 
+						            <input type="checkbox" class="include" ng-model="mnAdditionalTextModel" />MNAdditionalText 
 						        </label>
 							</div>
 						</div>

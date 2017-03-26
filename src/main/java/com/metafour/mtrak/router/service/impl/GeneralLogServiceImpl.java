@@ -1,5 +1,6 @@
 package com.metafour.mtrak.router.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,11 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 			ArrayList<EventLog> events=eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode());
 			if(events.size()>0 && events!=null){
 				eventLogRepo.deleteAllBySystemCode(obj.getCode());
+			}
+			File file = new File("C:/Windows/Temp" + File.separator + obj.getCode()+".ini");
+			System.out.println("file path >>>>>>>>>>>>"+file.getPath());
+			if (file.exists()) {
+				file.delete();
 			}
 		}
 	

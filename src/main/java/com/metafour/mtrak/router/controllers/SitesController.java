@@ -56,7 +56,7 @@ public class SitesController {
 			if(generalLog!=null){
 				GeneralLog obj=generalLogService.findByCode(generalLog.getCode().trim());
 				if(obj!=null){
-					res.put("message", obj.getCode()+"already exist");
+					res.put("message", obj.getCode()+" already exist");
 				}else{
 					for (EventLog eventLog : eventDatas) {
 						System.out.println("Code >>>>>>>>>>>>>>>>>>"+eventLog.getCode());

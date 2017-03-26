@@ -355,9 +355,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 	
 	$scope.edit=function(log){
 		$scope.getCacheData(log.code);
-		if($scope.resData=="success"){
-			window.location.href = '/iniconfig6.html';
-		}
+		
 //		alert($scope.resData);
 		
 		
@@ -375,7 +373,9 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 	$scope.getCacheData = function (log) {
         $http.get('/cache/'+log)
         .success(function (data, status, headers, config) {
-        	$scope.resData = data.message;
+        	if(data.message==="success"){
+    			window.location.href = '/iniconfig6.html';
+    		}
         })
         .error(function (data, status, header, config) {
             $scope.ResponseDetails = "Data: " + data +
@@ -468,8 +468,14 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 			$http.post('/sites/copy', gData, config)
 	        .success(function (data, status, headers, config) {
 	            $scope.PostDataResponse = data;
-	            $scope.reload();
-	            $('#myModalHorizontal').modal('hide');
+	            if(data.message!=="success"){
+	            	alert(data.message);
+	            	$('#myModalHorizontal').modal('show');
+	            }else{
+	            	$scope.reload();
+		            $('#myModalHorizontal').modal('hide');
+	            }
+	            
 	            
 	        })
 	        .error(function (data, status, header, config) {
@@ -486,6 +492,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 			page : 1,
 			count : 10
 		}, {
+			counts: [], // hide page counts control
 			total : $scope.logs.length,
 			getData : function($defer, params) {
 				var dttosw = params.sorting() ? $filter('orderBy')($scope.logs, params.orderBy()) : $scope.logs;
