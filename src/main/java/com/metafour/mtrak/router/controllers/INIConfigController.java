@@ -59,7 +59,7 @@ public class INIConfigController {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		if(this.code!=null && !this.code.equalsIgnoreCase("")){
 			response.put("message", this.code);
-			this.code="";
+//			this.code="";
 		}else{
 			response.put("message", "fail");
 		}
@@ -76,7 +76,7 @@ public class INIConfigController {
 		
 		if(generalLog!=null && !eventDatas.isEmpty() && eventDatas!=null){
 			System.out.println("list data >>>>>>>");
-			System.out.println(eventDatas.size());
+//			System.out.println(eventDatas.size());
 				generalLogService.save(generalLog, eventDatas);
 				response.put("message", "Success");
 		}else{

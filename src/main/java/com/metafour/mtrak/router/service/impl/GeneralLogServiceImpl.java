@@ -58,7 +58,7 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 			if(events.size()>0 && events!=null){
 				eventLogRepo.deleteAllBySystemCode(obj.getCode());
 			}
-			File file = new File("C:/Windows/Temp" + File.separator + obj.getCode()+".ini");
+			File file = new File("/tmp" + File.separator + obj.getCode()+".ini");
 			System.out.println("file path >>>>>>>>>>>>"+file.getPath());
 			if (file.exists()) {
 				file.delete();
@@ -83,7 +83,7 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 				}
 			}
 		}
-		WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
+		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
 		eventDatas=null;
 		return generalLog;
 	}
@@ -97,19 +97,23 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 			if(eventDatas.size()>0 && eventDatas!=null && !eventDatas.isEmpty()){
 				for (EventLog eventLog2 : eventDatas) {
 					eventLog2.setSystemCode(obj.getCode());
+					eventLog2.setType(obj.getType());
 					eventLogRepo.save(eventLog2);
 				}
 			}
 		}
 	
-	WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
+	WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
 	eventDatas=null;
 	return null;
 	}
 
 	@Override
+	@Transactional
 	public GeneralLog save(GeneralLog obj) {
-		// TODO Auto-generated method stub
+		if(obj.getCode()!=null){
+			generalLogRepo.save(obj);
+		}
 		return null;
 	}
 

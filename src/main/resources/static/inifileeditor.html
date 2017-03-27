@@ -1,0 +1,392 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>INI File Editor</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+		<link href="webjars/ng-table/ng-table.min.css" rel="stylesheet" media="screen"/>
+<!-- 		<link href="webjars/angular-chart.js/angular-chart.min.css" rel="stylesheet" media="screen"/> -->
+
+		<script src="webjars/jquery/jquery.min.js"></script>
+		<script src="webjars/bootstrap/js/bootstrap.min.js"></script>
+		<script src="webjars/angular/angular.min.js"></script>
+		<script src="webjars/ng-table/ng-table.min.js"></script>
+		<script src="webjars/angular-sanitize/angular-sanitize.min.js"></script>
+		<script src="webjars/ng-csv/ng-csv.min.js"></script>
+		<script src="webjars/chartjs/Chart.js"></script>
+		<script src="webjars/angular-chart.js/angular-chart.min.js"></script>
+		<script src="iniconfig2.js" type="text/javascript"></script>
+
+<style type="text/css">
+.green{
+	color: green;
+	display: table-cell;
+	}
+	
+	label {
+    display: inline-block !important;
+    max-width: 100% !important;
+    margin-bottom: 5px !important;
+    font-weight: 100 !important;
+}
+
+</style>
+
+
+
+<script>
+$(document).ready(function(){
+    $(".nav-tabs a").click(function(){
+        $(this).tab('show');
+    });
+   
+
+});
+</script>
+
+	</head>
+
+	<body ng-app="mtrak" style="padding-top: 80px;">
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+						aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#" style="padding-top: 5px;"><span style="padding-right: 5px;"><img style="height: 40px; width: auto;" alt="Brand" src="mTrak.ico"/></span>INI File Editor</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav navbar-right">
+			        <li><a class="btn btn-default" href="/mtrak.html"><span class="glyphicon glyphicon glyphicon-home"></span></a></li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+				
+				
+			</div>
+		</nav>
+<div class="container" ng-controller="iniController">
+
+<!-- ######### start form #########-->
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{description}}</h4>
+                <div class="input-group col-md-3 pull-right">
+                    <input type="text" ng-model="searchModel" typeahead="item for item in mtrackCodes | filter:$viewValue | limitTo:8" class="form-control" placeholder="Search">
+
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" ng-click="searching()"><i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" style="padding: 0px;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
+                <form name="myForm" class="form-horizontal" role="form">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#SystemTableOne">System</a>
+                        </li>
+                        <li><a href="#generalInfo">Settings</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="SystemTableOne" class="tab-pane fade in active">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div style="padding-top: 4px;">
+                                        <div class="form-group">
+                                            <label for="code" class="control-label col-sm-3">Code</label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input class="form-control" ng-model="code" name=code id="code" placeholder="Code" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtDescription" class="control-label col-sm-3">Description</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" ng-model="description" id="txtDescription" placeholder="Description" />
+                                        </div>
+                                    </div>
+									<div class="form-group">
+                                        <label for="txtDescription" class="control-label col-sm-3">Type</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" ng-model="type" ng-disabled="type!=null" id="txtDescription" placeholder="Description" />
+                                        </div>
+                                    </div>
+									
+                                    <div class="form-group">
+                                        <label for="txtEmail" class="control-label col-sm-3">Email</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" ng-model="email" id="txtEmail" ng-disabled="email!=null" placeholder="Email" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="padding-top: 4px;">
+                                        <label for="txtLogo" class="control-label col-sm-3">Logo</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" ng-model="logo" id="txtLogo" ng-disabled="logo!=null" placeholder="Logo Url" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="txtVersionFile" class="control-label col-sm-3">Version file</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" ng-model="versionFileUrl" id="txtVersionFile" ng-disabled="versionFileUrl!=null" placeholder="VersionFile Url" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <label class="checkbox">
+                                                <input type="checkbox" class="include" ng-model="jobCreate" />Allow to create job
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <label class="checkbox">
+                                                <input type="checkbox" class="include" ng-model="gPSEnableData" />Enable GPS
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <label class="checkbox">
+                                                <input type="checkbox" class="include" ng-model="validateMessenger" />Validate messenger
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12"></div>
+                        </div>
+                        <div id="generalInfo" class="tab-pane fade">
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group" style="padding-top: 4px;">
+                                        <label for="txtUploadURL" class="control-label col-sm-3">Upload URL</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" ng-model="uploadURL" ng-disabled="uploadURL!=null" id="txtUploadURL" placeholder="UploadURL" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtProcessURL" class="control-label col-sm-3">Process URL</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" ng-model="processURL" ng-disabled="processURL!=null" id="txtProcessURL" placeholder="ProcessURL" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtUploadPath" class="control-label col-sm-3">Upload path</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" ng-model="uploadPath" ng-disabled="uploadPath!=null" id="txtUploadPath" placeholder="UploadPath" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtMaxUploadSize" class="control-label col-sm-3">Max upload size</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" type="number" min="0" step="1" ng-model="maxUploadSize" id="txtMaxUploadSize" placeholder="MaxUploadSize" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="padding-top: 4px;">
+                                        <label for="txtUploadSleepInterval" class="control-label col-sm-3">Sleep interval</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" type="number" min="0" step="1" ng-model="uploadSleepInterval" id="txtUploadSleepInterval" placeholder="UploadSleepInterval" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" style="padding-top: 4px;">
+                                        <label for="txtDataCheckInterval" class="control-label col-sm-4">Data check interval</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" type="number" min="0" step="1" ng-model="dataCheckInterval" id="txtDataCheckInterval" placeholder="DataCheckInterval" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtBlockScanLimit" class="control-label col-sm-4">Block scan limit</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" type="number" min="0" step="1" ng-model="blockScanLimit" id="txtBlockScanLimit" placeholder="BlockScanLimit" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtWarningScanLimit" class="control-label col-sm-4">Warning scan limit</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" type="number" min="0" step="1" ng-model="warningScanLimit" id="txtWarningScanLimit" placeholder="WarningScanLimit" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtDeliveryTimeDuration" class="control-label col-sm-4">Delivery time duration</label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" type="number" min="0" step="1" ng-model="deliveryTimeDuration" id="txtDeliveryTimeDuration" placeholder="DeliveryTimeDuration" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12"></div>
+                        </div>
+                        <div class="pull-right" style="padding-bottom: 10px;padding-right: 10px">
+                            <button class="btn btn-primary" ng-disabled="myForm.code.$invalid" ng-click="SaveData()">
+                                <i class="glyphicon glyphicon-save-file"></i><span>Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <!-- <div class="panel-heading clearfix">
+                <h3 class="panel-title pull-left">Event Details</h3>
+                <div class="pull-right">
+                    <button class="btn btn-primary" ng-click="addNew()" data-toggle="modal" data-target="#myModalHorizontal"><i class="glyphicon glyphicon-plus"></i></button>
+                    <button class="btn btn-primary" ng-click="refresh()"><i class="glyphicon glyphicon-refresh"></i>Refresh</button>
+                </div>
+            </div> -->
+            <table id="logTableId" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Description</th>
+                        <th>Additional Screen</th>
+                        <th>Label</th>
+                        <th>Signature</th>
+                        <th>Shelfmark</th>
+                        <th>Additional Text</th>
+                        <th>
+                        	 <button class="btn btn-primary btn-sm" ng-click="addNew()" data-toggle="modal" data-target="#myModalHorizontal"><i class="glyphicon glyphicon-plus"></i></button>
+                    		<button class="btn btn-danger btn-sm" ng-click="refresh()"><i class="glyphicon glyphicon-trash"></i></button>
+						</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="log in items">
+                        <td>{{log.code}}</td>
+                        <td>{{log.description}}</td>
+                        <td ng-class="{'green glyphicon glyphicon-ok': (log.rqAdditionalText == 'Y')}"></td>
+                        <td>{{log.lbAdditionalText}}</td>
+                        <td ng-class="{'green glyphicon glyphicon-ok': (log.rqSignature == 'Y')}"></td>
+                        <td ng-class="{'green glyphicon glyphicon-ok': (log.rqShelfmark == 'Y')}"></td>
+                        <td ng-class="{'green glyphicon glyphicon-ok': (log.mnAdditionalText == 'Y')}"></td>
+                        <td>
+                            <button class="btn btn-info btn-sm" ng-click="edit(log)"><span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                            <button class="btn btn-danger btn-sm" ng-click="deleteData(log)"><span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div data-backdrop="static" data-keyboard="false" class="modal fade col-md-12 bd-example-modal-lg" id="myModalHorizontal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form name="modalForm" class="form-horizontal" id="modalForm">
+                    <div class="form-group">
+                        <label for="txtCodem" class="control-label col-sm-3">Code</label>
+                        <div class="col-md-6 col-sm-12">
+                            <input class="form-control" ng-model="codeModal" name=codeModal id="codeModal" required/>
+                            <input type="hidden" ng-model="codeModal" name=codeModal id="codeModal" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDescriptionm" class="control-label col-sm-3">Description</label>
+                        <div class="col-md-6 col-sm-12">
+                            <input class="form-control" ng-model="descriptionModal" id="txtDescriptionm" maxlength="9"/>
+                        </div>
+                    </div>
+                    
+                    
+                    	
+                    <div class="form-group">
+                        <div class="control-group" style="margin-top: -10px">
+                            <label class="control-label col-sm-3"></label>
+                            <div class="col-md-9 col-sm-12" style="padding-left: 35px;">
+                                <div class="controls">
+                                    <label class="checkbox">
+                                        <input type="checkbox" class="include" ng-model="additionalTextModel" />Additional screen
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                     
+                     <div ng-show="additionalTextModel" style="margin-top: -7px">
+                     	<div class="form-group">
+	                        <label for="txtCodem" class="control-label col-sm-3">Label</label>
+	                        <div class="col-md-6 col-sm-12">
+	                            <input class="form-control" ng-model="LbAdditionalTextModel" name=codeModal id="codeModal" maxlength="9" required/>
+	                        </div>
+                    	</div>
+                    	
+                     <div class="form-group" style="margin-top: -10px">
+                        <div class="control-group">
+                            <label class="control-label col-sm-3"></label>
+                            <div class="col-md-9 col-sm-12" style="padding-left: 35px;">
+                                <div class="controls">
+                                    <label class="checkbox">
+                                        <input type="checkbox" class="include" ng-model="signatureModel" />Mandatory signature
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label col-sm-3"></label>
+                            <div class="col-md-9 col-sm-12" style="padding-left: 35px;">
+                                <div class="controls">
+                                    <label class="checkbox">
+                                        <input type="checkbox" class="include" ng-model="rqShelfmarkModel" />Mandatory shelfmark
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label col-sm-3"></label>
+                            <div class="col-md-9 col-sm-12" style="padding-left: 35px;">
+                                <div class="controls">
+                                    <label class="checkbox">
+                                        <input type="checkbox" class="include" ng-model="mnAdditionalTextModel" />Mandatory additional text
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                    <div style="display:none">
+                        <div class="col-md-12">
+                            <label for="txtCodem" class="control-label">Code</label>
+                            <br />
+                            <input class="form-control" ng-model="codeModal" name=codeModal id="codeModal" required/>
+
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button id="btnAdd" ng-disabled="modalForm.codeModal.$invalid" ng-click="add()" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

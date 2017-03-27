@@ -72,6 +72,29 @@ public class SitesController {
 		return res;
 	}
 	
+	@RequestMapping(value="/sites/save", method = RequestMethod.POST)
+	public HashMap<String, Object> saveData(@RequestBody GeneralLog generalLog) {
+		HashMap<String, Object> res = new HashMap<String, Object>();
+		try {
+			if(generalLog!=null){
+				GeneralLog obj=generalLogService.findByCode(generalLog.getCode().trim());
+				if(obj!=null){
+					res.put("message", obj.getCode()+" already exist");
+				}else{
+					for (EventLog eventLog : eventDatas) {
+						System.out.println("Code >>>>>>>>>>>>>>>>>>"+eventLog.getCode());
+					}
+					generalLogService.save(generalLog);
+					res.put("message", "success");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("messsage  >>>>>."+e.getMessage());
+		}
+		return res;
+	}
+	
 	
 	ArrayList<EventLog> eventDatas =new ArrayList<EventLog>();
 	@RequestMapping(value="/site/system/{systemCode}", method = RequestMethod.GET)

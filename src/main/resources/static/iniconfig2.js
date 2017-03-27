@@ -25,8 +25,11 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 	
 	$scope.refresh = function() {
 		console.log("reset Call..");
-		getClear();
-		$scope.resetForm();
+		if (confirm('Are you sure to remove all ?')) {
+			getClear();
+			$scope.items="";
+	    }
+		
 	};
 	
 	var getClear = function () {
@@ -43,7 +46,7 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
     
    
     
-    getClear();
+//    getClear();
     modify();
     
     function modify(){
@@ -205,9 +208,9 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 	        .success(function (data, status, headers, config) {
 	            $scope.PostDataResponse = data;
 	            alert(data.message);
-	            $("#code").prop('disabled', false);
-	            $scope.resetForm();
-	            getClear();
+	            $("#code").prop('disabled', true);
+	            /*$scope.resetForm();
+	            getClear();*/
 	            
 	        })
 	        .error(function (data, status, header, config) {
@@ -228,6 +231,7 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 		$scope.rqShelfmarkModel=false;
 		$('#btnAdd').prop('title', 'save');
 		$('#btnAdd').text('Add');
+		$("#codeModal").prop('disabled', false);
 	}
 	
 	$scope.add=function() {
@@ -236,11 +240,11 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 			code: $scope.codeModal,
 			systemCode: "tt",
 			description: $scope.descriptionModal,
-			rqSignature: ($scope.signatureModel===true?"Y":"N"),
-			rqAdditionalText: ($scope.additionalTextModel===true?"Y":"N"),
-			rqShelfmark: ($scope.rqShelfmarkModel===true?"Y":"N"),
+			rqSignature: ($scope.additionalTextModel===true?($scope.signatureModel===true?"Y":"N"):"N"),
+			rqAdditionalText: ($scope.additionalTextModel===true?($scope.additionalTextModel===true?"Y":"N"):"N"),
+			rqShelfmark: ($scope.additionalTextModel===true?($scope.rqShelfmarkModel===true?"Y":"N"):"N"),
 			lbAdditionalText: ($scope.additionalTextModel===true?$scope.LbAdditionalTextModel:""),
-			mnAdditionalText: ($scope.mnAdditionalTextModel===true?"Y":"N")
+			mnAdditionalText: ($scope.additionalTextModel===true?($scope.mnAdditionalTextModel===true?"Y":"N"):"N")
             };
 		eData=JSON.stringify(eData);
 		var config = {
@@ -299,6 +303,7 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 		$scope.rqShelfmarkModel=(log.rqShelfmark==="Y"?true:false);
 		$('#btnAdd').prop('title', 'Update');
 		$('#btnAdd').text('Update');
+		$("#codeModal").prop('disabled', true);
 	    $("#myModalHorizontal").modal();
 	  };
 	
@@ -374,7 +379,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
         $http.get('/cache/'+log)
         .success(function (data, status, headers, config) {
         	if(data.message==="success"){
-    			window.location.href = '/iniconfig6.html';
+    			window.location.href = '/inifileeditor.html';
     		}
         })
         .error(function (data, status, header, config) {
@@ -437,53 +442,241 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 	
 	
 	$scope.SaveData=function(){
-		var gData = {
-				logo: $scope.logo,
-				versionFileUrl: $scope.versionFileUrl,
-				code: $scope.code,
-				description: $scope.description,
-				type: $scope.type,
-				email: $scope.email,
-				uploadURL: $scope.uploadURL,
-				uploadPath: $scope.uploadPath,
-				processURL: $scope.processURL,
-				dataCheckInterval: $scope.dataCheckInterval,
-				blockScanLimit: $scope.blockScanLimit,
-				warningScanLimit: $scope.warningScanLimit,
-				maxUploadSize: $scope.maxUploadSize,
-				uploadSleepInterval: $scope.uploadSleepInterval,
-				jobCreate: ($scope.jobCreate===true?"Y":"N"),
-				deliveryTimeDuration: $scope.deliveryTimeDuration,
-				validateMessenger: ($scope.validateMessenger===true?"Y":"N"),
-				gPSEnable: ($scope.gPSEnableData===true?"Y":"N")
-	            };
-			gData=JSON.stringify(gData);
-			var config = {
-	                headers : {
-	                    'Content-Type': 'application/json;charset=utf-8;'
-	                }
-	            }
-			
-			
-			$http.post('/sites/copy', gData, config)
-	        .success(function (data, status, headers, config) {
-	            $scope.PostDataResponse = data;
-	            if(data.message!=="success"){
-	            	alert(data.message);
-	            	$('#myModalHorizontal').modal('show');
-	            }else{
-	            	$scope.reload();
-		            $('#myModalHorizontal').modal('hide');
-	            }
-	            
-	            
-	        })
-	        .error(function (data, status, header, config) {
-	            $scope.ResponseDetails = data;
-	            $scope.resetForm();
-	        });
+		
+		if($scope.type==='iTrak'){
+			var gData = {
+					logo: "https://ms.m4.net/mtrak/config/logo.jpg",
+					versionFileUrl: "https://ms.m4.net/mtrak/update/live/version.ini",
+					code: $scope.code,
+					description: $scope.description,
+					type: $scope.type,
+					email: "mm"+$scope.code+"@ms.m4.net",
+					uploadURL: "https://ms.m4.net/"+$scope.code+"/PdaUpload",
+					uploadPath: "/itrak2/"+$scope.code+"/p_itrak/import",
+					processURL: "https://ms.m4.net/"+$scope.code+"/PdaManager?v=1.0",
+					dataCheckInterval: $scope.dataCheckInterval,
+					blockScanLimit: $scope.blockScanLimit,
+					warningScanLimit: $scope.warningScanLimit,
+					maxUploadSize: $scope.maxUploadSize,
+					uploadSleepInterval: $scope.uploadSleepInterval,
+					jobCreate: ($scope.jobCreate===true?"Y":"N"),
+					deliveryTimeDuration: $scope.deliveryTimeDuration,
+					validateMessenger: ($scope.validateMessenger===true?"Y":"N"),
+					gPSEnable: ($scope.gPSEnableData===true?"Y":"N")
+		            };
+				gData=JSON.stringify(gData);
+				var config = {
+		                headers : {
+		                    'Content-Type': 'application/json;charset=utf-8;'
+		                }
+		            }
+				
+				
+				$http.post('/sites/copy', gData, config)
+		        .success(function (data, status, headers, config) {
+		            $scope.PostDataResponse = data;
+		            if(data.message!=="success"){
+		            	if (confirm(data.message+'. Do you want to update')) {
+		            		$scope.getCacheData($scope.code);
+		        	    }
+//		            	$('#myModalHorizontal').modal('show');
+		            }else{
+		            	$scope.getCacheData($scope.code);
+		            	//$scope.reload();
+			            $('#myModalHorizontal').modal('hide');
+		            }
+		            
+		            
+		        })
+		        .error(function (data, status, header, config) {
+		            $scope.ResponseDetails = data;
+		            $scope.resetForm();
+		        });
+		}else{
+
+			var gData = {
+					logo: "https://ms.m4.net/mtrak/config/logo.jpg",
+					versionFileUrl: "https://ms.m4.net/mtrak/update/live/version.ini",
+					code: $scope.code,
+					description: $scope.description,
+					type: $scope.type,
+					email: "mm"+$scope.code+"@ms.m4.net",
+					uploadURL: "https://ms.m4.net/"+$scope.code+"/PdaUpload",
+					uploadPath: "/itrak2/"+$scope.code+"/p_itrak/import",
+					processURL: "https://ms.m4.net/"+$scope.code+"/PdaManager?v=1.0",
+					dataCheckInterval: $scope.dataCheckInterval,
+					blockScanLimit: $scope.blockScanLimit,
+					warningScanLimit: $scope.warningScanLimit,
+					maxUploadSize: $scope.maxUploadSize,
+					uploadSleepInterval: $scope.uploadSleepInterval,
+					jobCreate: ($scope.jobCreate===true?"Y":"N"),
+					deliveryTimeDuration: $scope.deliveryTimeDuration,
+					validateMessenger: ($scope.validateMessenger===true?"Y":"N"),
+					gPSEnable: ($scope.gPSEnableData===true?"Y":"N")
+		            };
+				gData=JSON.stringify(gData);
+				var config = {
+		                headers : {
+		                    'Content-Type': 'application/json;charset=utf-8;'
+		                }
+		            }
+				
+				
+				$http.post('/sites/copy', gData, config)
+		        .success(function (data, status, headers, config) {
+		            $scope.PostDataResponse = data;
+		            if(data.message!=="success"){
+		            	alert(data.message);
+//		            	$('#myModalHorizontal').modal('show');
+		            }else{
+		            	$scope.getCacheData($scope.code);
+		            	//$scope.reload();
+			            $('#myModalHorizontal').modal('hide');
+		            }
+		            
+		            
+		        })
+		        .error(function (data, status, header, config) {
+		            $scope.ResponseDetails = data;
+		            $scope.resetForm();
+		        });
+		
+		}
+		
+		
 			
 	}
+	
+	$scope.addNew=function(){
+		$scope.logo="";
+		$scope.versionFileUrl="";
+		$scope.code="";
+		$scope.description="";
+		$scope.type="";
+		$scope.email="";
+		$scope.uploadURL="";
+		$scope.uploadPath="";
+		$scope.processURL="";
+		$scope.dataCheckInterval="";
+		$scope.blockScanLimit="";
+		$scope.warningScanLimit="";
+		$scope.maxUploadSize="";
+		$scope.uploadSleepInterval="";
+		$scope.jobCreate="N";
+		$scope.deliveryTimeDuration,
+		$scope.validateMessenger="N";
+		$scope.gPSEnableData="N";
+	}
+	
+	$scope.SaveData1=function(){
+		if($scope.type==='iTrak'){
+			var gData = {
+					logo: "https://ms.m4.net/mtrak/config/logo.jpg",
+					versionFileUrl: "https://ms.m4.net/mtrak/update/live/version.ini",
+					code: $scope.code,
+					description: $scope.description,
+					type: $scope.type,
+					email: "mm"+$scope.code+"@ms.m4.net",
+					uploadURL: "https://ms.m4.net/"+$scope.code+"/PdaUpload",
+					uploadPath: "/itrak2/"+$scope.code+"/p_itrak/import",
+					processURL: "https://ms.m4.net/"+$scope.code+"/PdaManager?v=1.0",
+					dataCheckInterval: $scope.dataCheckInterval,
+					blockScanLimit: $scope.blockScanLimit,
+					warningScanLimit: $scope.warningScanLimit,
+					maxUploadSize: $scope.maxUploadSize,
+					uploadSleepInterval: $scope.uploadSleepInterval,
+					jobCreate: ($scope.jobCreate===true?"Y":"N"),
+					deliveryTimeDuration: $scope.deliveryTimeDuration,
+					validateMessenger: ($scope.validateMessenger===true?"Y":"N"),
+					gPSEnable: ($scope.gPSEnableData===true?"Y":"N")
+		            };
+				gData=JSON.stringify(gData);
+				var config = {
+		                headers : {
+		                    'Content-Type': 'application/json;charset=utf-8;'
+		                }
+		            }
+				
+				
+				$http.post('/sites/save', gData, config)
+		        .success(function (data, status, headers, config) {
+		            $scope.PostDataResponse = data;
+		            if(data.message!=="success"){
+		            	if (confirm(data.message+'. Do you want to update')) {
+		            		$scope.getCacheData($scope.code);
+		        	    }
+//		            	$('#myModalHorizontal').modal('show');
+		            }else{
+		            	$scope.getCacheData($scope.code);
+		            	//$scope.reload();
+			            $('#myModalHorizontal').modal('hide');
+		            }
+		            
+		            
+		        })
+		        .error(function (data, status, header, config) {
+		            $scope.ResponseDetails = data;
+		            $scope.resetForm();
+		        });
+			
+		}else{
+			
+			var gData = {
+					logo: $scope.logo,
+					versionFileUrl: $scope.versionFileUrl,
+					code: $scope.code,
+					description: $scope.description,
+					type: $scope.type,
+					email: $scope.email,
+					uploadURL: $scope.uploadURL,
+					uploadPath: $scope.uploadPath,
+					processURL: $scope.processURL,
+					dataCheckInterval: $scope.dataCheckInterval,
+					blockScanLimit: $scope.blockScanLimit,
+					warningScanLimit: $scope.warningScanLimit,
+					maxUploadSize: $scope.maxUploadSize,
+					uploadSleepInterval: $scope.uploadSleepInterval,
+					jobCreate: ($scope.jobCreate===true?"Y":"N"),
+					deliveryTimeDuration: $scope.deliveryTimeDuration,
+					validateMessenger: ($scope.validateMessenger===true?"Y":"N"),
+					gPSEnable: ($scope.gPSEnableData===true?"Y":"N")
+		            };
+				gData=JSON.stringify(gData);
+				var config = {
+		                headers : {
+		                    'Content-Type': 'application/json;charset=utf-8;'
+		                }
+		            }
+				
+				
+				$http.post('/sites/save', gData, config)
+		        .success(function (data, status, headers, config) {
+		            $scope.PostDataResponse = data;
+		            if(data.message!=="success"){
+		            	if (confirm(data.message+'. Do you want to update')) {
+		            		$scope.getCacheData($scope.code);
+		        	    }
+//		            	$('#myModalHorizontal').modal('show');
+		            }else{
+		            	$scope.getCacheData($scope.code);
+		            	//$scope.reload();
+			            $('#myModalHorizontal').modal('hide');
+		            }
+		            
+		            
+		        })
+		        .error(function (data, status, header, config) {
+		            $scope.ResponseDetails = data;
+		            $scope.resetForm();
+		        });
+			
+		}
+		
+		
+		
+			
+	}
+	
 	
 	
 	
