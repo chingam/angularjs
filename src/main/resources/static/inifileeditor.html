@@ -98,51 +98,58 @@ $(document).ready(function(){
                     <div class="tab-content">
                         <div id="SystemTableOne" class="tab-pane fade in active">
                             <div class="col-md-12">
-                                <div class="col-md-6">
-                                    <div style="padding-top: 4px;">
+                                <div class="col-md-6 col-sm-12">
+                                <div class="row">
+                                    <!-- <div style="padding-top: 4px;">
                                         <div class="form-group">
                                             <label for="code" class="control-label col-sm-3">Code</label>
-                                            <div class="col-md-6 col-sm-6">
+                                            <div class="col-md-6 col-sm-12">
                                                 <input class="form-control" ng-model="code" name=code id="code" placeholder="Code" required/>
                                             </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group" style="padding-top: 4px;">
+                                        <label for="code" class="control-label col-sm-3">Code</label>
+                                        <div class="col-md-6 col-sm-6 col-sm-12">
+                                            <input class="form-control" ng-model="code" name=code id="code" placeholder="Code" required/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="txtDescription" class="control-label col-sm-3">Description</label>
-                                        <div class="col-md-6 col-sm-6">
+                                        <div class="col-md-6 col-sm-6 col-sm-12">
                                             <input class="form-control" ng-model="description" id="txtDescription" placeholder="Description" />
                                         </div>
                                     </div>
 									<div class="form-group">
                                         <label for="txtDescription" class="control-label col-sm-3">Type</label>
-                                        <div class="col-md-6 col-sm-6">
+                                        <div class="col-md-6 col-sm-6 col-sm-12">
                                             <input class="form-control" ng-model="type" ng-disabled="type!=null" id="txtDescription" placeholder="Description" />
                                         </div>
                                     </div>
 									
                                     <div class="form-group">
                                         <label for="txtEmail" class="control-label col-sm-3">Email</label>
-                                        <div class="col-md-6 col-sm-6">
+                                        <div class="col-md-6 col-sm-6 col-sm-12">
                                             <input class="form-control" ng-model="email" id="txtEmail" ng-disabled="email!=null" placeholder="Email" />
                                         </div>
                                     </div>
                                     <div class="form-group" style="padding-top: 4px;">
                                         <label for="txtLogo" class="control-label col-sm-3">Logo</label>
-                                        <div class="col-md-6 col-sm-6">
+                                        <div class="col-md-6 col-sm-6 col-sm-12">
                                             <input class="form-control" ng-model="logo" id="txtLogo" ng-disabled="logo!=null" placeholder="Logo Url" />
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="txtVersionFile" class="control-label col-sm-3">Version file</label>
-                                        <div class="col-md-6 col-sm-6">
+                                        <div class="col-md-6 col-sm-6 col-sm-12">
                                             <input class="form-control" ng-model="versionFileUrl" id="txtVersionFile" ng-disabled="versionFileUrl!=null" placeholder="VersionFile Url" />
                                         </div>
                                     </div>
-
+								</div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-sm-12">
                                     <div class="control-group">
                                         <div class="controls">
                                             <label class="checkbox">
@@ -171,8 +178,8 @@ $(document).ready(function(){
                             <div class="col-md-12"></div>
                         </div>
                         <div id="generalInfo" class="tab-pane fade">
-                            <div class="col-md-12">
-                                <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
                                     <div class="form-group" style="padding-top: 4px;">
                                         <label for="txtUploadURL" class="control-label col-sm-3">Upload URL</label>
                                         <div class="col-md-6 col-sm-6">

@@ -74,7 +74,7 @@ public class INIConfigController {
 	public HashMap<String, Object> generalDataSave(@RequestBody GeneralLog generalLog) {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		
-		if(generalLog!=null && !eventDatas.isEmpty() && eventDatas!=null){
+		if(generalLog!=null){
 			System.out.println("list data >>>>>>>");
 //			System.out.println(eventDatas.size());
 				generalLogService.save(generalLog, eventDatas);

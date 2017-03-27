@@ -58,7 +58,7 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 			if(events.size()>0 && events!=null){
 				eventLogRepo.deleteAllBySystemCode(obj.getCode());
 			}
-			File file = new File("/tmp" + File.separator + obj.getCode()+".ini");
+			File file = new File("C:/Windows/Temp" + File.separator + obj.getCode()+".ini");
 			System.out.println("file path >>>>>>>>>>>>"+file.getPath());
 			if (file.exists()) {
 				file.delete();
@@ -83,7 +83,7 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 				}
 			}
 		}
-		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
+		WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
 		eventDatas=null;
 		return generalLog;
 	}
@@ -103,7 +103,7 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 			}
 		}
 	
-	WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
+	WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
 	eventDatas=null;
 	return null;
 	}
