@@ -13,6 +13,7 @@ import com.metafour.mtrak.router.entities.GeneralLog;
  */
 public interface GeneralLogService {
 	GeneralLog findByCode(String code);
+	GeneralLog findByCodeAndType(String code, String type);
 	List<GeneralLog> findAllByCode(String code);
 	GeneralLog save(GeneralLog obj);
 	GeneralLog save(GeneralLog obj,  ArrayList<EventLog> eventDatas);

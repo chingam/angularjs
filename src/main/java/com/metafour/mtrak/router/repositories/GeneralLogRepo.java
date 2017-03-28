@@ -15,6 +15,7 @@ import com.metafour.mtrak.router.entities.GeneralLog;
 public interface GeneralLogRepo extends CrudRepository<GeneralLog, Long> {
 
 	GeneralLog findByCode(String code);
+	GeneralLog findByCodeAndType(String code, String type);
 	List<GeneralLog> findAllByCode(String code);
 	List<GeneralLog> findByCodeContaining(String code);
 	List<GeneralLog> findAll();

@@ -9,8 +9,8 @@ import com.metafour.mtrak.router.entities.EventLog;
  *
  */
 public interface EventLogService {
-	EventLog findByCodeAndSystemCode(String code, String systemCode);
-	ArrayList<EventLog> findAllBySystemCode(String systemCode);
+	EventLog findBySystemCodeAndTypeAndCode(String systemCode, String type, String code);
+	ArrayList<EventLog> findAllBySystemCodeAndTypeOrderByCode(String systemCode, String type);
 	EventLog save(EventLog obj);
 	void delete(EventLog obj);
 }

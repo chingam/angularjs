@@ -19,6 +19,8 @@ app.factory('myService', function() {
 	});
 
 
+
+
 app.controller('iniController', function ($scope, $filter, $http, ngTableParams, myService) {
 	
 	//###################################################
@@ -31,6 +33,8 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 	    }
 		
 	};
+	
+	
 	
 	var getClear = function () {
 		$http.get('/fetch/clear')
@@ -57,7 +61,7 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
         		
         	}else{
 
-        		$http.get('/fetch/system/'+data.message)
+        		$http.get('/fetch/system/'+data.code+'/type/'+data.type)
                 .success(function (data, status, headers, config) {
                 	$scope.logo=data.gData.logo;
             		$scope.versionFileUrl=data.gData.versionFileUrl;
@@ -140,8 +144,14 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 	}
 	
 	$scope.searching=function(){
-		$http.get('/fetch/system/'+$scope.searchModel)
+		$http.get('/fetch/system/'+$scope.searchModel+'/type/'+$scope.type)
         .success(function (data, status, headers, config) {
+        	
+        	if(data.gData===null){
+        		alert('Does not match by '+$scope.searchModel);
+        		return;
+        	}
+        	
         	$scope.logo=data.gData.logo;
     		$scope.versionFileUrl=data.gData.versionFileUrl;
     		$scope.code=data.gData.code;
@@ -220,6 +230,9 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 			
 	}
 	
+	
+	
+	
 	$scope.addNew=function(){
 		$scope.typeModal="";
 		$scope.codeModal="";
@@ -235,6 +248,14 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 	}
 	
 	$scope.add=function() {
+		
+		if($scope.additionalTextModel===true){
+			if($scope.LbAdditionalTextModel===""||$scope.LbAdditionalTextModel===null|| $scope.LbAdditionalTextModel===undefined){
+				alert('You have selected Additional screen. So you must put value in label text field');
+				return;
+			}
+		}
+		
 		var eData = {
 			type: $scope.type,
 			code: $scope.codeModal,
@@ -246,6 +267,7 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 			lbAdditionalText: ($scope.additionalTextModel===true?$scope.LbAdditionalTextModel:""),
 			mnAdditionalText: ($scope.additionalTextModel===true?($scope.mnAdditionalTextModel===true?"Y":"N"):"N")
             };
+		var pData=eData;
 		eData=JSON.stringify(eData);
 		var config = {
 		                headers : {
@@ -255,6 +277,13 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 		
 			if ($('#btnAdd').attr("title") === "Update") {
 			
+			if($scope.additionalTextModel===true){
+				if($scope.LbAdditionalTextModel===""||$scope.LbAdditionalTextModel===null|| $scope.LbAdditionalTextModel===undefined){
+					alert('You have selected Additional screen. So you must put value in label text field');
+					return;
+				}
+			}
+				
 			$http.post('/eventConfigu/update', eData, config)
 	        .success(function (data, status, headers, config) {
 	            $scope.PostDataResponse = data;
@@ -269,25 +298,31 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 		}else{
 			$http.post('/eventConfig2', eData, config)
 	        .success(function (data, status, headers, config) {
-	            $scope.PostDataResponse = data;
-	            
-	            $('#myModalHorizontal').modal('hide');
-	            $scope.GetAllData();
+	            if(data.message!=='success'){
+	            	alert(data.message);
+	            	return;
+	            }else{
+	            	$('#myModalHorizontal').modal('hide');
+		            $scope.GetAllData();
+		            
+		            $scope.typeModal="";
+		    		$scope.codeModal="";
+		    		$scope.descriptionModal="";
+		    		$scope.signatureModel=false;
+		    		$scope.additionalTextModel=false;
+		    		$scope.mnAdditionalTextModel=false;
+		    		$scope.rqShelfmarkModel=false;
+		    		$scope.LbAdditionalTextModel="";
+		            
+		            
+		            
+	            }
 	        })
 	        .error(function (data, status, header, config) {
 	            $scope.ResponseDetails = data;
 	        });
 			
 		}
-		
-		$scope.typeModal="";
-		$scope.codeModal="";
-		$scope.descriptionModal="";
-		$scope.signatureModel=false;
-		$scope.additionalTextModel=false;
-		$scope.mnAdditionalTextModel=false;
-		$scope.rqShelfmarkModel=false;
-		$scope.LbAdditionalTextModel="";
 		
 	}
 	
@@ -359,7 +394,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 	$scope.chart_data = [];
 	
 	$scope.edit=function(log){
-		$scope.getCacheData(log.code);
+		$scope.getCacheData(log.code, log.type);
 		
 //		alert($scope.resData);
 		
@@ -375,8 +410,8 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		
 	}
 	
-	$scope.getCacheData = function (log) {
-        $http.get('/cache/'+log)
+	$scope.getCacheData = function (code,type) {
+        $http.get('/cache/'+code+'/type/'+type)
         .success(function (data, status, headers, config) {
         	if(data.message==="success"){
     			window.location.href = '/inifileeditor.html';
@@ -392,7 +427,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 	
 	
 	$scope.fetching=function(log){
-		$http.get('/site/system/'+log.code)
+		$http.get('/site/system/'+log.code+'/type/'+log.type)
         .success(function (data, status, headers, config) {
         	$scope.logo=data.gData.logo;
     		$scope.versionFileUrl=data.gData.versionFileUrl;
@@ -428,7 +463,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 	
 	
 	$scope.deleteData=function(log){
-		$http.get('/site/delete/'+log.code)
+		$http.get('/site/delete/'+log.code+'/type/'+log.type)
         .success(function (data, status, headers, config) {
         	$scope.reload();
         })
@@ -476,12 +511,12 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		        .success(function (data, status, headers, config) {
 		            $scope.PostDataResponse = data;
 		            if(data.message!=="success"){
-		            	if (confirm(data.message+'. Do you want to update')) {
-		            		$scope.getCacheData($scope.code);
+		            	if (confirm(data.message+'. Do you want to update ?')) {
+		            		$scope.getCacheData($scope.code, $scope.type);
 		        	    }
 //		            	$('#myModalHorizontal').modal('show');
 		            }else{
-		            	$scope.getCacheData($scope.code);
+		            	$scope.getCacheData($scope.code, $scope.type);
 		            	//$scope.reload();
 			            $('#myModalHorizontal').modal('hide');
 		            }
@@ -526,10 +561,12 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		        .success(function (data, status, headers, config) {
 		            $scope.PostDataResponse = data;
 		            if(data.message!=="success"){
-		            	alert(data.message);
+		            	if (confirm(data.message+'. Do you want to update ?')) {
+		            		$scope.getCacheData($scope.code, $scope.type);
+		        	    }
 //		            	$('#myModalHorizontal').modal('show');
 		            }else{
-		            	$scope.getCacheData($scope.code);
+		            	$scope.getCacheData($scope.code, $scope.type);
 		            	//$scope.reload();
 			            $('#myModalHorizontal').modal('hide');
 		            }
@@ -603,11 +640,11 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		            $scope.PostDataResponse = data;
 		            if(data.message!=="success"){
 		            	if (confirm(data.message+'. Do you want to update')) {
-		            		$scope.getCacheData($scope.code);
+		            		$scope.getCacheData($scope.code, $scope.type);
 		        	    }
 //		            	$('#myModalHorizontal').modal('show');
 		            }else{
-		            	$scope.getCacheData($scope.code);
+		            	$scope.getCacheData($scope.code, $scope.type);
 		            	//$scope.reload();
 			            $('#myModalHorizontal').modal('hide');
 		            }
@@ -622,15 +659,15 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		}else{
 			
 			var gData = {
-					logo: $scope.logo,
-					versionFileUrl: $scope.versionFileUrl,
+					logo: "https://ms.m4.net/mtrak/config/logo.jpg",
+					versionFileUrl: "https://ms.m4.net/mtrak/update/live/version.ini",
 					code: $scope.code,
 					description: $scope.description,
 					type: $scope.type,
-					email: $scope.email,
-					uploadURL: $scope.uploadURL,
-					uploadPath: $scope.uploadPath,
-					processURL: $scope.processURL,
+					email: "mm"+$scope.code+"@ms.m4.net",
+					uploadURL: "https://ms.m4.net/"+$scope.code+"/PdaUpload",
+					uploadPath: "/itrak2/"+$scope.code+"/p_itrak/import",
+					processURL: "https://ms.m4.net/"+$scope.code+"/PdaManager?v=1.0",
 					dataCheckInterval: $scope.dataCheckInterval,
 					blockScanLimit: $scope.blockScanLimit,
 					warningScanLimit: $scope.warningScanLimit,
@@ -654,11 +691,11 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		            $scope.PostDataResponse = data;
 		            if(data.message!=="success"){
 		            	if (confirm(data.message+'. Do you want to update')) {
-		            		$scope.getCacheData($scope.code);
+		            		$scope.getCacheData($scope.code, $scope.type);
 		        	    }
 //		            	$('#myModalHorizontal').modal('show');
 		            }else{
-		            	$scope.getCacheData($scope.code);
+		            	$scope.getCacheData($scope.code, $scope.type);
 		            	//$scope.reload();
 			            $('#myModalHorizontal').modal('hide');
 		            }

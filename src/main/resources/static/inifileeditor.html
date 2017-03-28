@@ -233,7 +233,7 @@ $(document).ready(function(){
                                     <div class="form-group">
                                         <label for="txtDeliveryTimeDuration" class="control-label col-sm-4">Delivery time duration</label>
                                         <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="number" min="0" step="1" ng-model="deliveryTimeDuration" id="txtDeliveryTimeDuration" placeholder="DeliveryTimeDuration" />
+                                            <input class="form-control" type="number" data-bind="value:txtDeliveryTimeDuration"  min="0" step="1" ng-model="deliveryTimeDuration" id="txtDeliveryTimeDuration" placeholder="DeliveryTimeDuration" />
                                         </div>
                                     </div>
                                 </div>
@@ -309,15 +309,15 @@ $(document).ready(function(){
                 <form name="modalForm" class="form-horizontal" id="modalForm">
                     <div class="form-group">
                         <label for="txtCodem" class="control-label col-sm-3">Code</label>
-                        <div class="col-md-6 col-sm-12">
-                            <input class="form-control" ng-model="codeModal" name=codeModal id="codeModal" required/>
-                            <input type="hidden" ng-model="codeModal" name=codeModal id="codeModal" required/>
+                        <div class="col-md-2 col-sm-12">
+                            <input type="text" class="form-control" maxlength="1" style='text-transform:uppercase' ng-model="codeModal" name=codeModal id="codeModal" required/>
+                            <input type="hidden" ng-model="codeModal"  name=codeModal id="codeModal" required/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="txtDescriptionm" class="control-label col-sm-3">Description</label>
-                        <div class="col-md-6 col-sm-12">
-                            <input class="form-control" ng-model="descriptionModal" id="txtDescriptionm" maxlength="9"/>
+                        <div class="col-md-5 col-sm-12">
+                            <input class="form-control" ng-model="descriptionModal" id="txtDescriptionm" name="txtDescriptionm" maxlength="9" required/>
                         </div>
                     </div>
                     
@@ -329,7 +329,7 @@ $(document).ready(function(){
                             <div class="col-md-9 col-sm-12" style="padding-left: 35px;">
                                 <div class="controls">
                                     <label class="checkbox">
-                                        <input type="checkbox" class="include" ng-model="additionalTextModel" />Additional screen
+                                        <input type="checkbox" class="include" ng-model="additionalTextModel" name="additionalTextModel"/>Additional screen
                                     </label>
                                 </div>
                             </div>
@@ -338,9 +338,9 @@ $(document).ready(function(){
                      
                      <div ng-show="additionalTextModel" style="margin-top: -7px">
                      	<div class="form-group">
-	                        <label for="txtCodem" class="control-label col-sm-3">Label</label>
+	                        <label for="LbAdditionalTextModel" class="control-label col-sm-3">Label</label>
 	                        <div class="col-md-6 col-sm-12">
-	                            <input class="form-control" ng-model="LbAdditionalTextModel" name=codeModal id="codeModal" maxlength="9" required/>
+	                            <input class="form-control" ng-model="LbAdditionalTextModel" name=LbAdditionalTextModel id="LbAdditionalTextModel" maxlength="9" required/>
 	                        </div>
                     	</div>
                     	
@@ -387,7 +387,7 @@ $(document).ready(function(){
                     </div>
                 </form>
                 <div class="modal-footer">
-                    <button id="btnAdd" ng-disabled="modalForm.codeModal.$invalid" ng-click="add()" class="btn btn-primary">Add</button>
+                    <button id="btnAdd" ng-disabled="modalForm.codeModal.$invalid || modalForm.txtDescriptionm.$invalid" ng-click="add()" class="btn btn-primary">Add</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                 </div>
             </div>

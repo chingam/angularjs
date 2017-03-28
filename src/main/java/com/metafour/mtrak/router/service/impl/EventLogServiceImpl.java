@@ -26,16 +26,16 @@ public class EventLogServiceImpl implements EventLogService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public EventLog findByCodeAndSystemCode(String code, String systemCode) {
+	public EventLog findBySystemCodeAndTypeAndCode(String systemCode, String type, String code){
 		// TODO Auto-generated method stub
-		return eventLogRepo.findByCodeAndSystemCode(code, systemCode);
+		return eventLogRepo.findBySystemCodeAndTypeAndCode(systemCode, type, code);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public ArrayList<EventLog> findAllBySystemCode(String systemCode) {
+	public ArrayList<EventLog> findAllBySystemCodeAndTypeOrderByCode(String systemCode, String type) {
 		// TODO Auto-generated method stub
-		return eventLogRepo.findAllBySystemCodeOrderByCode(systemCode);
+		return eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(systemCode, type);
 	}
 
 	@Override

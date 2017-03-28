@@ -40,6 +40,7 @@ public class EventLog implements Serializable {
 	@Column
 	private String systemCode;
 	
+	@Id
 	@Column
 	private String type;
 	

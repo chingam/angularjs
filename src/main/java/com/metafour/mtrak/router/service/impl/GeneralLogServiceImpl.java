@@ -54,11 +54,11 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 	public void delete(GeneralLog obj) {
 		if(obj!=null){
 			generalLogRepo.delete(obj);
-			ArrayList<EventLog> events=eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode());
+			ArrayList<EventLog> events=eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(obj.getCode(), obj.getType());
 			if(events.size()>0 && events!=null){
-				eventLogRepo.deleteAllBySystemCode(obj.getCode());
+				eventLogRepo.deleteAllBySystemCodeAndType(obj.getCode(), obj.getType());
 			}
-			File file = new File("C:/Windows/Temp" + File.separator + obj.getCode()+".ini");
+			File file = new File("/tmp" + File.separator + obj.getCode()+".ini");
 			System.out.println("file path >>>>>>>>>>>>"+file.getPath());
 			if (file.exists()) {
 				file.delete();
@@ -76,14 +76,15 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 			generalLog=generalLogRepo.save(obj);
 			
 			if(eventDatas.size()>0 && eventDatas!=null && !eventDatas.isEmpty()){
-				eventLogRepo.deleteAllBySystemCode(obj.getCode());
+				eventLogRepo.deleteAllBySystemCodeAndType(obj.getCode(), obj.getType());
 				for (EventLog eventLog2 : eventDatas) {
 					eventLog2.setSystemCode(obj.getCode());
+					eventLog2.setType(obj.getType());
 					eventLogRepo.save(eventLog2);
 				}
 			}
 		}
-		WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
+		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(obj.getCode(), obj.getType()));
 		eventDatas=null;
 		return generalLog;
 	}
@@ -103,7 +104,7 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 			}
 		}
 	
-	WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeOrderByCode(obj.getCode()));
+	WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(obj.getCode(), obj.getType()));
 	eventDatas=null;
 	return null;
 	}
@@ -140,6 +141,12 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 	public List<GeneralLog> findAll() {
 		// TODO Auto-generated method stub
 		return generalLogRepo.findAll();
+	}
+
+	@Override
+	public GeneralLog findByCodeAndType(String code, String type) {
+		// TODO Auto-generated method stub
+		return generalLogRepo.findByCodeAndType(code, type);
 	}
 
 	

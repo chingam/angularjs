@@ -5,8 +5,10 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 
 @Entity
+@IdClass(GeneralLogKey.class)
 public class GeneralLog implements Serializable{
 
 	private static final long serialVersionUID = -5211490759059570649L;
@@ -24,6 +26,7 @@ public class GeneralLog implements Serializable{
 	@Column(length=1000)
 	private String description;
 	
+	@Id
 	@Column
 	private String type;
 	

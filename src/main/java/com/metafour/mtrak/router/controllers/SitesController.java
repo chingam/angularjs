@@ -54,7 +54,7 @@ public class SitesController {
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		try {
 			if(generalLog!=null){
-				GeneralLog obj=generalLogService.findByCode(generalLog.getCode().trim());
+				GeneralLog obj=generalLogService.findByCodeAndType(generalLog.getCode().trim(), generalLog.getType().trim());
 				if(obj!=null){
 					res.put("message", obj.getCode()+" already exist");
 				}else{
@@ -77,7 +77,7 @@ public class SitesController {
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		try {
 			if(generalLog!=null){
-				GeneralLog obj=generalLogService.findByCode(generalLog.getCode().trim());
+				GeneralLog obj=generalLogService.findByCodeAndType(generalLog.getCode().trim(), generalLog.getType().trim());
 				if(obj!=null){
 					res.put("message", obj.getCode()+" already exist");
 				}else{
@@ -97,15 +97,15 @@ public class SitesController {
 	
 	
 	ArrayList<EventLog> eventDatas =new ArrayList<EventLog>();
-	@RequestMapping(value="/site/system/{systemCode}", method = RequestMethod.GET)
+	@RequestMapping(value="/site/system/{systemCode}/type/{type}", method = RequestMethod.GET)
 	@ApiOperation(tags="Event Logs", value="Site Code", notes="Get device upload logs")
-	public HashMap<String, Object> fetchByCode(@ApiParam(value = "systemCode", required = true) @PathVariable String systemCode) {
+	public HashMap<String, Object> fetchByCode(@ApiParam(value = "systemCode", required = true) @PathVariable String systemCode, @PathVariable String type) {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		try {
 			if (systemCode != null) {
 				eventDatas.clear();
-				response.put("gData", generalLogService.findByCode(systemCode));
-				eventDatas=eventLogService.findAllBySystemCode(systemCode);
+				response.put("gData", generalLogService.findByCodeAndType(systemCode, type));
+				eventDatas=eventLogService.findAllBySystemCodeAndTypeOrderByCode(systemCode, type);
 				response.put("eventList", eventDatas);
 				return response;
 			} else {
@@ -120,13 +120,14 @@ public class SitesController {
 	
 	
 	
-	@RequestMapping(value="/site/delete/{systemCode}", method = RequestMethod.GET)
-	public HashMap<String, Object> delete(@PathVariable String systemCode) {
+	@RequestMapping(value="/site/delete/{systemCode}/type/{type}", method = RequestMethod.GET)
+	public HashMap<String, Object> delete(@PathVariable String systemCode, @PathVariable String type) {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		try {
 			if (systemCode != null) {
 				GeneralLog obj=new GeneralLog();
 				obj.setCode(systemCode);
+				obj.setType(type);
 				generalLogService.delete(obj);
 				response.put("message", "success");
 			} else {

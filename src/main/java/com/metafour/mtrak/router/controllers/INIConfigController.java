@@ -40,11 +40,13 @@ public class INIConfigController {
 	GeneralLogService generalLogService;
 	
 	String code="";
-	@RequestMapping(value="/cache/{code}", method = RequestMethod.GET)
-	public HashMap<String, Object> cacheData(@PathVariable String code) {
+	String type="";
+	@RequestMapping(value="/cache/{code}/type/{type}", method = RequestMethod.GET)
+	public HashMap<String, Object> cacheData(@PathVariable String code, @PathVariable String type) {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		if(code!=null){
 			this.code=code;
+			this.type=type;
 			response.put("message", "success");
 		}else{
 			response.put("message", "fail");
@@ -58,7 +60,8 @@ public class INIConfigController {
 	public HashMap<String, Object> getCacheData() {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		if(this.code!=null && !this.code.equalsIgnoreCase("")){
-			response.put("message", this.code);
+			response.put("code", this.code);
+			response.put("type", this.type);
 //			this.code="";
 		}else{
 			response.put("message", "fail");
@@ -128,7 +131,7 @@ public class INIConfigController {
 	public HashMap<String, Object> getClear() {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		try {
-			if(this.code.equalsIgnoreCase("")==Boolean.TRUE || this.code==null){
+			/*if(this.code.equalsIgnoreCase("")==Boolean.TRUE || this.code==null){
 				if(!eventDatas.isEmpty()){
 					eventDatas.clear();
 					
@@ -137,7 +140,9 @@ public class INIConfigController {
 				response.put("message", "success");
 			}else{
 //				fetchByCode(this.code);
-			}
+			}*/
+			
+			eventDatas.clear();
 			
 		} catch (Exception e) {
 			logger.error("Failed to clean");
@@ -150,15 +155,15 @@ public class INIConfigController {
 	
 	
 //TODO
-	@RequestMapping(value="/fetch/system/{systemCode}", method = RequestMethod.GET)
+	@RequestMapping(value="/fetch/system/{systemCode}/type/{type}", method = RequestMethod.GET)
 	@ApiOperation(tags="Event Logs", value="Site Code", notes="Get device upload logs")
-	public HashMap<String, Object> fetchByCode(@ApiParam(value = "systemCode", required = true) @PathVariable String systemCode) {
+	public HashMap<String, Object> fetchByCode(@ApiParam(value = "systemCode", required = true) @PathVariable String systemCode, @PathVariable String type) {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		try {
 			if (systemCode != null) {
 				eventDatas.clear();
-				response.put("gData", generalLogService.findByCode(systemCode));
-				eventDatas=eventLogService.findAllBySystemCode(systemCode);
+				response.put("gData", generalLogService.findByCodeAndType(systemCode, type));
+				eventDatas=eventLogService.findAllBySystemCodeAndTypeOrderByCode(systemCode, type);
 				response.put("eventList", eventDatas);
 				return response;
 			} else {
@@ -195,13 +200,31 @@ public class INIConfigController {
 	public HashMap<String, Object> eventDataSave2(@RequestBody EventLog eventLog) {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		if(eventLog!=null){
-			eventDatas.add(eventLog);
-			response.put("message", "Success");
+			
+			if(checkDuplicate(eventLog, eventDatas)){
+				response.put("message", eventLog.getCode()+" already exist");
+			}else{
+				eventDatas.add(eventLog);
+				response.put("message", "success");
+			}
+			
 		}else{
-			response.put("message", "operation fail");
+			response.put("message", "not success");
 		}
 		
 		return response;
+	}
+
+
+	private boolean checkDuplicate(EventLog eventLog, ArrayList<EventLog> eventDatas) {
+		for (int i = 0; i < eventDatas.size(); i++) {
+			EventLog eLog=eventDatas.get(i);
+			if(eLog.getCode().equalsIgnoreCase(eventLog.getCode())){
+				return true;
+			}
+			
+		}
+		return false;
 	}
 
 	
@@ -277,11 +300,11 @@ public class INIConfigController {
 	
 	
 	
-	@RequestMapping(value="/fetch/{code}", method = RequestMethod.GET)
+	@RequestMapping(value="/fetch/{code}/type/{type}", method = RequestMethod.GET)
 	@ApiOperation(tags="Event Logs", value="Site Code", notes="Get device upload logs")
-	public ArrayList<EventLog> getLogs(@ApiParam(value = "Month as yyyy-MM to get logs", required = true) @PathVariable String code) {
+	public ArrayList<EventLog> getLogs(@ApiParam(value = "Month as yyyy-MM to get logs", required = true) @PathVariable String code, @PathVariable String type) {
 		try {
-			ArrayList<EventLog> eventLogs = eventLogService.findAllBySystemCode(code);
+			ArrayList<EventLog> eventLogs = eventLogService.findAllBySystemCodeAndTypeOrderByCode(code, type);
 			if (!eventLogs.isEmpty() && eventLogs != null) {
 				return eventLogs;
 			} else {
@@ -294,12 +317,12 @@ public class INIConfigController {
 		return null;
 	}
 	
-	@RequestMapping(value="/delete/{systemCode}/{code}", method = RequestMethod.GET)
+	@RequestMapping(value="/delete/{systemCode}/{code}/type/{type}", method = RequestMethod.GET)
 	@ApiOperation(tags="Event Logs", value="Site Code", notes="Get device upload logs")
-	public HashMap<String, Object> delete(@ApiParam(value = "Month as yyyy-MM to get logs", required = true) @PathVariable String code, @ApiParam(value = "Month as yyyy-MM to get logs", required = true) @PathVariable String systemCode) {
+	public HashMap<String, Object> delete(@ApiParam(value = "Month as yyyy-MM to get logs", required = true) @PathVariable String code, @ApiParam(value = "Month as yyyy-MM to get logs", required = true) @PathVariable String systemCode, @PathVariable String type) {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		try {
-			EventLog eventLogs = eventLogService.findByCodeAndSystemCode(code, systemCode);
+			EventLog eventLogs = eventLogService.findBySystemCodeAndTypeAndCode(systemCode, type, code);
 			if(eventLogs!=null){
 				eventLogService.delete(eventLogs);
 				response.put("message", "Success");
