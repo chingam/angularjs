@@ -24,13 +24,18 @@
 	display: table-cell;
 	}
 	
-	label {
-    display: inline-block !important;
-    max-width: 100% !important;
-    margin-bottom: 5px !important;
-    font-weight: 100 !important;
+label {
+	display: inline-block !important;
+	max-width: 100% !important;
+	margin-bottom: 5px !important;
+	font-weight: 100 !important;
 }
-
+.important
+{
+	border-style:solid;
+	border-width:2px;
+	border-color:red;
+}
 </style>
 
 
@@ -340,7 +345,7 @@ $(document).ready(function(){
                      	<div class="form-group">
 	                        <label for="LbAdditionalTextModel" class="control-label col-sm-3">Label</label>
 	                        <div class="col-md-6 col-sm-12">
-	                            <input class="form-control" ng-model="LbAdditionalTextModel" name=LbAdditionalTextModel id="LbAdditionalTextModel" maxlength="9" required/>
+	                            <input class="form-control" ng-model="LbAdditionalTextModel" name=LbAdditionalTextModel id="LbAdditionalTextModel" maxlength="9" required/><span id="vText"></span>
 	                        </div>
                     	</div>
                     	

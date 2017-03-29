@@ -26,13 +26,12 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 	//###################################################
 	
 	$scope.refresh = function() {
-		console.log("reset Call..");
-		if (confirm('Are you sure to remove all ?')) {
-			getClear();
-			$scope.items="";
+	    console.log("reset Call..");
+	    if (confirm('Are you sure to remove all ?')) {
+	        getClear();
+	        $scope.items = "";
 	    }
-		
-	};
+	}
 	
 	
 	
@@ -45,7 +44,7 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
         .error(function (data, status, header, config) {
             $scope.ResponseDetails = data
             });
-    };
+    }
     
     
    
@@ -245,13 +244,16 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 		$('#btnAdd').prop('title', 'save');
 		$('#btnAdd').text('Add');
 		$("#codeModal").prop('disabled', false);
+		$('#LbAdditionalTextModel').removeAttr("style");
+		$('#vText').text("");
 	}
 	
 	$scope.add=function() {
 		
 		if($scope.additionalTextModel===true){
 			if($scope.LbAdditionalTextModel===""||$scope.LbAdditionalTextModel===null|| $scope.LbAdditionalTextModel===undefined){
-				alert('You have selected Additional screen. So you must put value in label text field');
+				$('#LbAdditionalTextModel').css({"border-style":"solid","border-width":"1px", "border-color":"red"});
+				$('#vText').text("this field is required").css({"color":"red"});
 				return;
 			}
 		}
@@ -276,10 +278,12 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
             }
 		
 			if ($('#btnAdd').attr("title") === "Update") {
-			
+				
 			if($scope.additionalTextModel===true){
+				
 				if($scope.LbAdditionalTextModel===""||$scope.LbAdditionalTextModel===null|| $scope.LbAdditionalTextModel===undefined){
-					alert('You have selected Additional screen. So you must put value in label text field');
+					$('#LbAdditionalTextModel').css({"border-style":"solid","border-width":"1px", "border-color":"red"});
+					$('#vText').text("this field is required").css({"color":"red"});
 					return;
 				}
 			}
@@ -339,6 +343,8 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 		$('#btnAdd').prop('title', 'Update');
 		$('#btnAdd').text('Update');
 		$("#codeModal").prop('disabled', true);
+		$('#LbAdditionalTextModel').removeAttr("style");
+		$('#vText').text("");
 	    $("#myModalHorizontal").modal();
 	  };
 	
@@ -395,19 +401,6 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 	
 	$scope.edit=function(log){
 		$scope.getCacheData(log.code, log.type);
-		
-//		alert($scope.resData);
-		
-		
-		/*var resData=getCall('/cache/'+log.code);
-		if(resData.message==='success'){
-			window.location.href = '/iniconfig6.html';
-		}else{
-			alert("server down");
-		}
-		*/
-		
-		
 	}
 	
 	$scope.getCacheData = function (code,type) {
@@ -507,7 +500,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		            }
 				
 				
-				$http.post('/sites/copy', gData, config)
+				$http.post('/copy', gData, config)
 		        .success(function (data, status, headers, config) {
 		            $scope.PostDataResponse = data;
 		            if(data.message!=="success"){
@@ -557,7 +550,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		            }
 				
 				
-				$http.post('/sites/copy', gData, config)
+				$http.post('/copy', gData, config)
 		        .success(function (data, status, headers, config) {
 		            $scope.PostDataResponse = data;
 		            if(data.message!=="success"){
@@ -742,7 +735,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 	});
 
 	function load(callback) {
-		$http.get('/sites/it5555')
+		$http.get('/fetch/sites')
         .success(function (data, status, headers, config) {
         	$scope.logs = data;
         	if (callback) callback();
