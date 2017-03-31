@@ -1,5 +1,6 @@
 package com.metafour.mtrak.router.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.metafour.mtrak.router.entities.EventLog;
 import com.metafour.mtrak.router.entities.GeneralLog;
 import com.metafour.mtrak.router.service.EventLogService;
 import com.metafour.mtrak.router.service.GeneralLogService;
@@ -44,7 +46,7 @@ public class MtrakApplicationController {
 				if(obj!=null){
 					res.put("message", obj.getCode()+" already exist");
 				}else{
-					generalLogService.copy(generalLog, eventLogService.findAllBySystemCodeAndTypeOrderByCode(generalLog.getCode(), generalLog.getType()));
+					generalLogService.copy(generalLog, logs);
 					res.put("message", "success");
 				}
 			}
@@ -72,13 +74,16 @@ public class MtrakApplicationController {
 		return res;
 	}
 	
+	ArrayList<EventLog> logs=new ArrayList<EventLog>();
 	@RequestMapping(value="/site/system/{systemCode}/type/{type}", method = RequestMethod.GET)
 	public HashMap<String, Object> fetchByCode(@PathVariable String systemCode, @PathVariable String type) {
 		HashMap<String, Object> response=new HashMap<String, Object>();
 		try {
 			if (systemCode != null) {
+				logs.clear();
+				logs=eventLogService.findAllBySystemCodeAndTypeOrderByCode(systemCode, type);
 				response.put("gData", generalLogService.findByCodeAndType(systemCode, type));
-				response.put("eventList", eventLogService.findAllBySystemCodeAndTypeOrderByCode(systemCode, type));
+				response.put("eventList", logs);
 				return response;
 			} else {
 				return null;

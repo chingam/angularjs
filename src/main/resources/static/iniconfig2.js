@@ -260,7 +260,7 @@ app.controller('iniController', function ($scope, $filter, $http, ngTableParams,
 		
 		var eData = {
 			type: $scope.type,
-			code: $scope.codeModal,
+			code: $scope.codeModal.toUpperCase(),
 			systemCode: "tt",
 			description: $scope.descriptionModal,
 			rqSignature: ($scope.additionalTextModel===true?($scope.signatureModel===true?"Y":"N"):"N"),
@@ -632,7 +632,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		        .success(function (data, status, headers, config) {
 		            $scope.PostDataResponse = data;
 		            if(data.message!=="success"){
-		            	if (confirm(data.message+'. Do you want to update')) {
+		            	if (confirm(data.message+'. Do you want to update ?')) {
 		            		$scope.getCacheData($scope.code, $scope.type);
 		        	    }
 //		            	$('#myModalHorizontal').modal('show');
@@ -683,7 +683,7 @@ app.controller('sitesController', function ($scope, $filter, $http, ngTableParam
 		        .success(function (data, status, headers, config) {
 		            $scope.PostDataResponse = data;
 		            if(data.message!=="success"){
-		            	if (confirm(data.message+'. Do you want to update')) {
+		            	if (confirm(data.message+'. Do you want to update ?')) {
 		            		$scope.getCacheData($scope.code, $scope.type);
 		        	    }
 //		            	$('#myModalHorizontal').modal('show');
