@@ -22,372 +22,331 @@ app.factory('myService', function() {
 
 
 app.controller('iniController', function ($scope, $filter, $http, ngTableParams, myService) {
-	
-	//###################################################
-	
-	$scope.refresh = function() {
-	    console.log("reset Call..");
-	    if (confirm('Are you sure to remove all ?')) {
-	        getClear();
-	        $scope.items = "";
-	    }
-	}
-	
-	
-	
-	var getClear = function () {
-		$http.get('/fetch/clear')
-        .success(function (data, status, headers, config) {
-            $scope.message = data;
-            $("#code").prop('disabled', false);
-        })
-        .error(function (data, status, header, config) {
-            $scope.ResponseDetails = data
+$scope.refresh = function() {
+    if (confirm('Are you sure to remove all ?')) {
+        getClear();
+        $scope.items = "";
+    }
+}
+
+var getClear = function() {
+        $http.get('/fetch/clear')
+            .success(function(data, status, headers, config) {
+                $scope.message = data;
+                $("#code").prop('disabled', false);
+            })
+            .error(function(data, status, header, config) {
+                $scope.ResponseDetails = data
             });
     }
-    
-    
-   
-    
-//    getClear();
-    modify();
-    
-    function modify(){
-    	$http.get('/getCache')
-        .success(function (data, status, headers, config) {
-        	console.log(data.message);
-        	if(data.message=='fail'){
-        		
-        	}else{
 
-        		$http.get('/fetch/system/'+data.code+'/type/'+data.type)
-                .success(function (data, status, headers, config) {
-                	$scope.logo=data.gData.logo;
-            		$scope.versionFileUrl=data.gData.versionFileUrl;
-            		$scope.code=data.gData.code;
-            		$scope.description=data.gData.description;
-            		$scope.type=data.gData.type;
-            		$scope.email=data.gData.email;
-            		$scope.uploadURL=data.gData.uploadURL;
-            		$scope.uploadPath=data.gData.uploadPath;
-            		$scope.processURL=data.gData.processURL;
-            		$scope.dataCheckInterval=data.gData.dataCheckInterval;
-            		$scope.blockScanLimit=data.gData.blockScanLimit;
-            		$scope.warningScanLimit=data.gData.warningScanLimit;
-            		$scope.maxUploadSize=data.gData.maxUploadSize;
-            		$scope.uploadSleepInterval=data.gData.uploadSleepInterval;
-            		$scope.jobCreate=(data.gData.jobCreate==="Y"?true:false);
-            		$scope.deliveryTimeDuration=data.gData.deliveryTimeDuration;
-            		$scope.validateMessenger=(data.gData.validateMessenger=="Y"?true:false);
-            		$scope.gPSEnableData=(data.gData.gPSEnable==="Y"?true:false);
-            		
-                    	$scope.items = data.eventList;
-                    	$("#code").prop('disabled', true);
-                    	$('.nav-tabs a[href="#SystemTableOne"]').tab('show');
+modify();
 
-                })
-                .error(function (data, status, header, config) {
-                    $scope.ResponseDetails = "Data: " + data +
-                        "<br />status: " + status +
-                        "<br />headers: " + jsonFilter(header) +
-                        "<br />config: " + jsonFilter(config);
-                });
-        	
-        		
-        	}
-        })
-        .error(function (data, status, header, config) {
-            $scope.ResponseDetails = "Data: " + data +
-                "<br />status: " + status +
-                "<br />headers: " + jsonFilter(header) +
-                "<br />config: " + jsonFilter(config);
-        });
-    }
-	
-    
-    
-    
-    
-	$scope.resetForm=function(){
-		$scope.items="";
-		$scope.searchModel="";
-		$scope.logo="";
-		$scope.versionFileUrl="";
-		$scope.code="";
-		$scope.description="";
-		$scope.type="";
-		$scope.email="";
-		$scope.uploadURL="";
-		$scope.uploadPath="";
-		$scope.processURL="";
-		$scope.dataCheckInterval="";
-		$scope.blockScanLimit="";
-		$scope.warningScanLimit="";
-		$scope.maxUploadSize="";
-		$scope.uploadSleepInterval="";
-		$scope.jobCreate=false;
-		$scope.deliveryTimeDuration="",
-		$scope.validateMessenger=false;
-		$scope.gPSEnableData=false;
-		
-		$scope.typeModal="";
-		$scope.codeModal="";
-		$scope.descriptionModal="";
-		$scope.signatureModel=false;
-		$scope.additionalTextModel=false;
-		$scope.LbAdditionalTextModel="";
-		$scope.mnAdditionalTextModel=false;
-		$scope.rqShelfmarkModel=false;
-		$('#btnAdd').prop('title', 'save');
-		$('.nav-tabs a[href="#SystemTableOne"]').tab('show');
-	}
-	
-	$scope.searching=function(){
-		$http.get('/fetch/system/'+$scope.searchModel+'/type/'+$scope.type)
-        .success(function (data, status, headers, config) {
-        	
-        	if(data.gData===null){
-        		alert('Does not match by '+$scope.searchModel);
-        		return;
-        	}
-        	
-        	$scope.logo=data.gData.logo;
-    		$scope.versionFileUrl=data.gData.versionFileUrl;
-    		$scope.code=data.gData.code;
-    		$scope.description=data.gData.description;
-    		$scope.type=data.gData.type;
-    		$scope.email=data.gData.email;
-    		$scope.uploadURL=data.gData.uploadURL;
-    		$scope.uploadPath=data.gData.uploadPath;
-    		$scope.processURL=data.gData.processURL;
-    		$scope.dataCheckInterval=data.gData.dataCheckInterval;
-    		$scope.blockScanLimit=data.gData.blockScanLimit;
-    		$scope.warningScanLimit=data.gData.warningScanLimit;
-    		$scope.maxUploadSize=data.gData.maxUploadSize;
-    		$scope.uploadSleepInterval=data.gData.uploadSleepInterval;
-    		$scope.jobCreate=(data.gData.jobCreate==="Y"?true:false);
-    		$scope.deliveryTimeDuration=data.gData.deliveryTimeDuration;
-    		$scope.validateMessenger=(data.gData.validateMessenger=="Y"?true:false);
-    		$scope.gPSEnableData=(data.gData.gPSEnable==="Y"?true:false);
-    		
-            	$scope.items = data.eventList;
-            	$("#code").prop('disabled', true);
-            	$('.nav-tabs a[href="#SystemTableOne"]').tab('show');
+function modify() {
+    $http.get('/getCache')
+        .success(function(data, status, headers, config) {
+            console.log(data.message);
+            if (data.message == 'fail') {
 
-        })
-        .error(function (data, status, header, config) {
-            $scope.ResponseDetails = "Data: " + data +
-                "<br />status: " + status +
-                "<br />headers: " + jsonFilter(header) +
-                "<br />config: " + jsonFilter(config);
-        });
-	}
-	
-	
-	$scope.SaveData=function(){
-		var gData = {
-				logo: $scope.logo,
-				versionFileUrl: $scope.versionFileUrl,
-				code: $scope.code,
-				description: $scope.description,
-				type: $scope.type,
-				email: $scope.email,
-				uploadURL: $scope.uploadURL,
-				uploadPath: $scope.uploadPath,
-				processURL: $scope.processURL,
-				dataCheckInterval: $scope.dataCheckInterval,
-				blockScanLimit: $scope.blockScanLimit,
-				warningScanLimit: $scope.warningScanLimit,
-				maxUploadSize: $scope.maxUploadSize,
-				uploadSleepInterval: $scope.uploadSleepInterval,
-				jobCreate: ($scope.jobCreate===true?"Y":"N"),
-				deliveryTimeDuration: $scope.deliveryTimeDuration,
-				validateMessenger: ($scope.validateMessenger===true?"Y":"N"),
-				gPSEnable: ($scope.gPSEnableData===true?"Y":"N")
-	            };
-			gData=JSON.stringify(gData);
-			var config = {
-	                headers : {
-	                    'Content-Type': 'application/json;charset=utf-8;'
-	                }
-	            }
-			
-			
-			$http.post('/generalConfig', gData, config)
-	        .success(function (data, status, headers, config) {
-	            $scope.PostDataResponse = data;
-	            alert(data.message);
-	            $("#code").prop('disabled', true);
-	            /*$scope.resetForm();
-	            getClear();*/
-	            
-	        })
-	        .error(function (data, status, header, config) {
-	            $scope.ResponseDetails = data;
-	            $scope.resetForm();
-	        });
-			
-	}
-	
-	
-	
-	
-	$scope.addNew=function(){
-		$scope.typeModal="";
-		$scope.codeModal="";
-		$scope.descriptionModal="";
-		$scope.signatureModel=false;
-		$scope.additionalTextModel=false;
-		$scope.LbAdditionalTextModel="";
-		$scope.mnAdditionalTextModel=false;
-		$scope.rqShelfmarkModel=false;
-		$('#btnAdd').prop('title', 'save');
-		$('#btnAdd').text('Add');
-		$("#codeModal").prop('disabled', false);
-		$('#LbAdditionalTextModel').removeAttr("style");
-		$('#vText').text("");
-	}
-	
-	$scope.add=function() {
-		
-		if($scope.additionalTextModel===true){
-			if($scope.LbAdditionalTextModel===""||$scope.LbAdditionalTextModel===null|| $scope.LbAdditionalTextModel===undefined){
-				$('#LbAdditionalTextModel').css({"border-style":"solid","border-width":"1px", "border-color":"red"});
-				$('#vText').text("this field is required").css({"color":"red"});
-				return;
-			}
-		}
-		
-		var eData = {
-			type: $scope.type,
-			code: $scope.codeModal.toUpperCase(),
-			systemCode: "tt",
-			description: $scope.descriptionModal,
-			rqSignature: ($scope.additionalTextModel===true?($scope.signatureModel===true?"Y":"N"):"N"),
-			rqAdditionalText: ($scope.additionalTextModel===true?($scope.additionalTextModel===true?"Y":"N"):"N"),
-			rqShelfmark: ($scope.additionalTextModel===true?($scope.rqShelfmarkModel===true?"Y":"N"):"N"),
-			lbAdditionalText: ($scope.additionalTextModel===true?$scope.LbAdditionalTextModel:""),
-			mnAdditionalText: ($scope.additionalTextModel===true?($scope.mnAdditionalTextModel===true?"Y":"N"):"N")
-            };
-		var pData=eData;
-		eData=JSON.stringify(eData);
-		var config = {
-		                headers : {
-		                    'Content-Type': 'application/json;charset=utf-8;'
-		                }
+            } else {
+                $http.get('/fetch/system/' + data.code + '/type/' + data.type)
+                    .success(function(data, status, headers, config) {
+                        $scope.logo = data.gData.logo;
+                        $scope.versionFileUrl = data.gData.versionFileUrl;
+                        $scope.code = data.gData.code;
+                        $scope.description = data.gData.description;
+                        $scope.type = data.gData.type;
+                        $scope.email = data.gData.email;
+                        $scope.uploadURL = data.gData.uploadURL;
+                        $scope.uploadPath = data.gData.uploadPath;
+                        $scope.processURL = data.gData.processURL;
+                        $scope.dataCheckInterval = data.gData.dataCheckInterval;
+                        $scope.blockScanLimit = data.gData.blockScanLimit;
+                        $scope.warningScanLimit = data.gData.warningScanLimit;
+                        $scope.maxUploadSize = data.gData.maxUploadSize;
+                        $scope.uploadSleepInterval = data.gData.uploadSleepInterval;
+                        $scope.jobCreate = (data.gData.jobCreate === "Y" ? true : false);
+                        $scope.deliveryTimeDuration = data.gData.deliveryTimeDuration;
+                        $scope.validateMessenger = (data.gData.validateMessenger == "Y" ? true : false);
+                        $scope.gPSEnableData = (data.gData.gPSEnable === "Y" ? true : false);
+                        $scope.items = data.eventList;
+                        $("#code").prop('disabled', true);
+                        $('.nav-tabs a[href="#SystemTableOne"]').tab('show');
+                    })
+                    .error(function(data, status, header, config) {
+                               console.log(data);
+                    });
             }
-		
-			if ($('#btnAdd').attr("title") === "Update") {
-				
-			if($scope.additionalTextModel===true){
-				
-				if($scope.LbAdditionalTextModel===""||$scope.LbAdditionalTextModel===null|| $scope.LbAdditionalTextModel===undefined){
-					$('#LbAdditionalTextModel').css({"border-style":"solid","border-width":"1px", "border-color":"red"});
-					$('#vText').text("this field is required").css({"color":"red"});
-					return;
-				}
-			}
-				
-			$http.post('/eventConfigu/update', eData, config)
-	        .success(function (data, status, headers, config) {
-	            $scope.PostDataResponse = data;
-	            
-	            $('#myModalHorizontal').modal('hide');
-	            $scope.GetAllData();
-	        })
-	        .error(function (data, status, header, config) {
-	            $scope.ResponseDetails = data;
-	        });
-			
-		}else{
-			$http.post('/eventConfig2', eData, config)
-	        .success(function (data, status, headers, config) {
-	            if(data.message!=='success'){
-	            	alert(data.message);
-	            	return;
-	            }else{
-	            	$('#myModalHorizontal').modal('hide');
-		            $scope.GetAllData();
-		            
-		            $scope.typeModal="";
-		    		$scope.codeModal="";
-		    		$scope.descriptionModal="";
-		    		$scope.signatureModel=false;
-		    		$scope.additionalTextModel=false;
-		    		$scope.mnAdditionalTextModel=false;
-		    		$scope.rqShelfmarkModel=false;
-		    		$scope.LbAdditionalTextModel="";
-		            
-		            
-		            
-	            }
-	        })
-	        .error(function (data, status, header, config) {
-	            $scope.ResponseDetails = data;
-	        });
-			
-		}
-		
-	}
-	
-	
-	$scope.edit = function(log){
-		$scope.typeModal=log.type;
-		$scope.codeModal=log.code;
-		$scope.descriptionModal=log.description;
-		$scope.signatureModel=(log.rqSignature==="Y"?true:false);
-		$scope.additionalTextModel=(log.rqAdditionalText==="Y"?true:false);
-		$scope.LbAdditionalTextModel=log.lbAdditionalText;
-		$scope.mnAdditionalTextModel=(log.mnAdditionalText==="Y"?true:false);
-		$scope.rqShelfmarkModel=(log.rqShelfmark==="Y"?true:false);
-		$('#btnAdd').prop('title', 'Update');
-		$('#btnAdd').text('Update');
-		$("#codeModal").prop('disabled', true);
-		$('#LbAdditionalTextModel').removeAttr("style");
-		$('#vText').text("");
-	    $("#myModalHorizontal").modal();
-	  };
-	
-	  $scope.deleteData = function(log){
-			//  /delete/{systemCode}/{code}
-			  $http.get('/delete2/'+log.code)
-		        .success(function (data, status, headers, config) {
-		            $scope.message = data;
-		        })
-		        .error(function (data, status, header, config) {
-		            $scope.ResponseDetails = data
-		            });
-			  
-			  $scope.GetAllData();
-			    
-			  };
-	
-	
-	
+        }).error(function(data, status, header, config) {
+                  console.log(data);
+        });
+}
 
-	$scope.reset = function() {
-						$scope.resetForm();
-					};
+$scope.resetForm = function() {
+    $scope.items = "";
+    $scope.searchModel = "";
+    $scope.logo = "";
+    $scope.versionFileUrl = "";
+    $scope.code = "";
+    $scope.description = "";
+    $scope.type = "";
+    $scope.email = "";
+    $scope.uploadURL = "";
+    $scope.uploadPath = "";
+    $scope.processURL = "";
+    $scope.dataCheckInterval = "";
+    $scope.blockScanLimit = "";
+    $scope.warningScanLimit = "";
+    $scope.maxUploadSize = "";
+    $scope.uploadSleepInterval = "";
+    $scope.jobCreate = false;
+    $scope.deliveryTimeDuration = "",
+    $scope.validateMessenger = false;
+    $scope.gPSEnableData = false;
 
-	
+    $scope.typeModal = "";
+    $scope.codeModal = "";
+    $scope.descriptionModal = "";
+    $scope.signatureModel = false;
+    $scope.additionalTextModel = false;
+    $scope.LbAdditionalTextModel = "";
+    $scope.mnAdditionalTextModel = false;
+    $scope.rqShelfmarkModel = false;
+    $('#btnAdd').prop('title', 'save');
+    $('.nav-tabs a[href="#SystemTableOne"]').tab('show');
+}
 
-	
-	
-	
-	$scope.GetAllData = function () {
-        $http.get('/fetch/all')
-        .success(function (data, status, headers, config) {
+$scope.searching = function() {
+    $http.get('/fetch/system/' + $scope.searchModel + '/type/' + $scope.type)
+        .success(function(data, status, headers, config) {
+            if (data.gData === null) {
+                alert('Not found by ' + $scope.searchModel);
+                return;
+            }
+            $scope.logo = data.gData.logo;
+            $scope.versionFileUrl = data.gData.versionFileUrl;
+            $scope.code = data.gData.code;
+            $scope.description = data.gData.description;
+            $scope.type = data.gData.type;
+            $scope.email = data.gData.email;
+            $scope.uploadURL = data.gData.uploadURL;
+            $scope.uploadPath = data.gData.uploadPath;
+            $scope.processURL = data.gData.processURL;
+            $scope.dataCheckInterval = data.gData.dataCheckInterval;
+            $scope.blockScanLimit = data.gData.blockScanLimit;
+            $scope.warningScanLimit = data.gData.warningScanLimit;
+            $scope.maxUploadSize = data.gData.maxUploadSize;
+            $scope.uploadSleepInterval = data.gData.uploadSleepInterval;
+            $scope.jobCreate = (data.gData.jobCreate === "Y" ? true : false);
+            $scope.deliveryTimeDuration = data.gData.deliveryTimeDuration;
+            $scope.validateMessenger = (data.gData.validateMessenger == "Y" ? true : false);
+            $scope.gPSEnableData = (data.gData.gPSEnable === "Y" ? true : false);
+
+            $scope.items = data.eventList;
+            $("#code").prop('disabled', true);
+            $('.nav-tabs a[href="#SystemTableOne"]').tab('show');
+
+        })
+        .error(function(data, status, header, config) {
+                 console.log(data);
+        });
+}
+
+$scope.SaveData = function() {
+    var gData = {
+        logo: $scope.logo,
+        versionFileUrl: $scope.versionFileUrl,
+        code: $scope.code,
+        description: $scope.description,
+        type: $scope.type,
+        email: $scope.email,
+        uploadURL: $scope.uploadURL,
+        uploadPath: $scope.uploadPath,
+        processURL: $scope.processURL,
+        dataCheckInterval: $scope.dataCheckInterval,
+        blockScanLimit: $scope.blockScanLimit,
+        warningScanLimit: $scope.warningScanLimit,
+        maxUploadSize: $scope.maxUploadSize,
+        uploadSleepInterval: $scope.uploadSleepInterval,
+        jobCreate: ($scope.jobCreate === true ? "Y" : "N"),
+        deliveryTimeDuration: $scope.deliveryTimeDuration,
+        validateMessenger: ($scope.validateMessenger === true ? "Y" : "N"),
+        gPSEnable: ($scope.gPSEnableData === true ? "Y" : "N")
+    };
+    gData = JSON.stringify(gData);
+    var config = {
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8;'
+        }
+    }
+    $http.post('/generalConfig', gData, config)
+        .success(function(data, status, headers, config) {
+            $scope.PostDataResponse = data;
+            alert(data.message);
+            $("#code").prop('disabled', true);
+            /*$scope.resetForm();
+	            getClear();*/
+
+        })
+        .error(function(data, status, header, config) {
+            $scope.ResponseDetails = data;
+            $scope.resetForm();
+        });
+
+}
+
+$scope.addNew = function() {
+    $scope.typeModal = "";
+    $scope.codeModal = "";
+    $scope.descriptionModal = "";
+    $scope.signatureModel = false;
+    $scope.additionalTextModel = false;
+    $scope.LbAdditionalTextModel = "";
+    $scope.mnAdditionalTextModel = false;
+    $scope.rqShelfmarkModel = false;
+    $('#btnAdd').prop('title', 'save');
+    $('#btnAdd').text('Add');
+    $("#codeModal").prop('disabled', false);
+    $('#LbAdditionalTextModel').removeAttr("style");
+    $('#vText').text("");
+}
+
+$scope.add = function() {
+    if ($scope.additionalTextModel === true) {
+        if ($scope.LbAdditionalTextModel === "" || $scope.LbAdditionalTextModel === null || $scope.LbAdditionalTextModel === undefined) {
+            $('#LbAdditionalTextModel').css({
+                "border-style": "solid",
+                "border-width": "1px",
+                "border-color": "red"
+            });
+            $('#vText').text("this field is required").css({
+                "color": "red"
+            });
+            return;
+        }
+    }
+
+    var eData = {
+        type: $scope.type,
+        code: $scope.codeModal.toUpperCase(),
+        systemCode: "tt",
+        description: $scope.descriptionModal,
+        rqSignature: ($scope.additionalTextModel === true ? ($scope.signatureModel === true ? "Y" : "N") : "N"),
+        rqAdditionalText: ($scope.additionalTextModel === true ? ($scope.additionalTextModel === true ? "Y" : "N") : "N"),
+        rqShelfmark: ($scope.additionalTextModel === true ? ($scope.rqShelfmarkModel === true ? "Y" : "N") : "N"),
+        lbAdditionalText: ($scope.additionalTextModel === true ? $scope.LbAdditionalTextModel : ""),
+        mnAdditionalText: ($scope.additionalTextModel === true ? ($scope.mnAdditionalTextModel === true ? "Y" : "N") : "N")
+    };
+    var pData = eData;
+    eData = JSON.stringify(eData);
+    var config = {
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8;'
+        }
+    }
+
+    if ($('#btnAdd').attr("title") === "Update") {
+
+        if ($scope.additionalTextModel === true) {
+
+            if ($scope.LbAdditionalTextModel === "" || $scope.LbAdditionalTextModel === null || $scope.LbAdditionalTextModel === undefined) {
+                $('#LbAdditionalTextModel').css({
+                    "border-style": "solid",
+                    "border-width": "1px",
+                    "border-color": "red"
+                });
+                $('#vText').text("this field is required").css({
+                    "color": "red"
+                });
+                return;
+            }
+        }
+
+        $http.post('/eventConfigu/update', eData, config)
+            .success(function(data, status, headers, config) {
+                $scope.PostDataResponse = data;
+                $('#myModalHorizontal').modal('hide');
+                $scope.GetAllData();
+            })
+            .error(function(data, status, header, config) {
+                $scope.ResponseDetails = data;
+            });
+
+    } else {
+        $http.post('/eventConfig2', eData, config)
+            .success(function(data, status, headers, config) {
+                if (data.message !== 'success') {
+                    alert(data.message);
+                    return;
+                } else {
+                    $('#myModalHorizontal').modal('hide');
+                    $scope.GetAllData();
+
+                    $scope.typeModal = "";
+                    $scope.codeModal = "";
+                    $scope.descriptionModal = "";
+                    $scope.signatureModel = false;
+                    $scope.additionalTextModel = false;
+                    $scope.mnAdditionalTextModel = false;
+                    $scope.rqShelfmarkModel = false;
+                    $scope.LbAdditionalTextModel = "";
+                }
+            })
+            .error(function(data, status, header, config) {
+                $scope.ResponseDetails = data;
+            });
+
+    }
+
+}
+
+$scope.edit = function(log) {
+    $scope.typeModal = log.type;
+    $scope.codeModal = log.code;
+    $scope.descriptionModal = log.description;
+    $scope.signatureModel = (log.rqSignature === "Y" ? true : false);
+    $scope.additionalTextModel = (log.rqAdditionalText === "Y" ? true : false);
+    $scope.LbAdditionalTextModel = log.lbAdditionalText;
+    $scope.mnAdditionalTextModel = (log.mnAdditionalText === "Y" ? true : false);
+    $scope.rqShelfmarkModel = (log.rqShelfmark === "Y" ? true : false);
+    $('#btnAdd').prop('title', 'Update');
+    $('#btnAdd').text('Update');
+    $("#codeModal").prop('disabled', true);
+    $('#LbAdditionalTextModel').removeAttr("style");
+    $('#vText').text("");
+    $("#myModalHorizontal").modal();
+};
+
+$scope.deleteData = function(log) {
+    //  /delete/{systemCode}/{code}
+    $http.get('/delete2/' + log.code)
+        .success(function(data, status, headers, config) {
+            $scope.message = data;
+        })
+        .error(function(data, status, header, config) {
+            $scope.ResponseDetails = data
+        });
+
+    $scope.GetAllData();
+
+};
+
+$scope.reset = function() {
+    $scope.resetForm();
+};
+
+$scope.GetAllData = function() {
+    $http.get('/fetch/all')
+        .success(function(data, status, headers, config) {
             $scope.items = data;
         })
-        .error(function (data, status, header, config) {
+        .error(function(data, status, header, config) {
             $scope.ResponseDetails = "Data: " + data +
                 "<br />status: " + status +
                 "<br />headers: " + jsonFilter(header) +
                 "<br />config: " + jsonFilter(config);
         });
-    };
-	
-	
+};
 });
 
 

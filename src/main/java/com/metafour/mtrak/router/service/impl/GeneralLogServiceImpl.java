@@ -28,54 +28,48 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 
 	@Autowired
 	GeneralLogRepo generalLogRepo;
-	
+
 	@Autowired
 	EventLogRepo eventLogRepo;
 	
-	@Autowired
-	EventHql eventHql;
+	ArrayList<DragAndDrop> dragAndDrops;
 
 	@Override
 	@Transactional(readOnly = true)
 	public GeneralLog findByCode(String code) {
-		// TODO Auto-generated method stub
 		return generalLogRepo.findByCode(code);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<GeneralLog> findAllByCode(String code) {
-		// TODO Auto-generated method stub
 		return generalLogRepo.findAllByCode(code);
 	}
 
 	@Override
 	@Transactional
 	public void delete(GeneralLog obj) {
-		if(obj!=null){
+		if (obj != null) {
 			generalLogRepo.delete(obj);
-			ArrayList<EventLog> events=eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(obj.getCode(), obj.getType());
-			if(events.size()>0 && events!=null){
+			ArrayList<EventLog> events = eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(obj.getCode(), obj.getType());
+			if (events.size() > 0 && events != null) {
 				eventLogRepo.deleteAllBySystemCodeAndType(obj.getCode(), obj.getType());
 			}
-			File file = new File("/tmp" + File.separator + obj.getCode()+".ini");
-			System.out.println("file path >>>>>>>>>>>>"+file.getPath());
+			File file = new File("C:/Windows/Temp" + File.separator + obj.getCode() + ".ini");
+			System.out.println("file path >>>>>>>>>>>>" + file.getPath());
 			if (file.exists()) {
 				file.delete();
 			}
 		}
-	
 	}
 
 	@Override
 	@Transactional
 	public GeneralLog save(GeneralLog obj, ArrayList<EventLog> eventDatas) {
-		// TODO Auto-generated method stub
 		GeneralLog generalLog = null;
-		if(obj.getCode()!=null){
-			generalLog=generalLogRepo.save(obj);
-			
-			if(eventDatas.size()>0 && eventDatas!=null && !eventDatas.isEmpty()){
+		if (obj.getCode() != null) {
+			generalLog = generalLogRepo.save(obj);
+			if (eventDatas.size() > 0 && eventDatas != null && !eventDatas.isEmpty()) {
 				eventLogRepo.deleteAllBySystemCodeAndType(obj.getCode(), obj.getType());
 				for (EventLog eventLog2 : eventDatas) {
 					eventLog2.setSystemCode(obj.getCode());
@@ -84,18 +78,17 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 				}
 			}
 		}
-		WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(obj.getCode(), obj.getType()));
-		eventDatas=null;
+		WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode() + ".ini", obj, eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(obj.getCode(), obj.getType()));
+		eventDatas = null;
 		return generalLog;
 	}
-	
+
 	@Override
 	@Transactional
 	public GeneralLog copy(GeneralLog obj, ArrayList<EventLog> eventDatas) {
-		if(obj.getCode()!=null){
+		if (obj.getCode() != null) {
 			generalLogRepo.save(obj);
-			
-			if(eventDatas.size()>0 && eventDatas!=null && !eventDatas.isEmpty()){
+			if (eventDatas.size() > 0 && eventDatas != null && !eventDatas.isEmpty()) {
 				for (EventLog eventLog2 : eventDatas) {
 					eventLog2.setSystemCode(obj.getCode());
 					eventLog2.setType(obj.getType());
@@ -103,16 +96,15 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 				}
 			}
 		}
-	
-	WriteUtils.writeINIFIle("/tmp", obj.getCode()+".ini", obj, eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(obj.getCode(), obj.getType()));
-	eventDatas=null;
-	return null;
+		WriteUtils.writeINIFIle("C:/Windows/Temp", obj.getCode() + ".ini", obj, eventLogRepo.findAllBySystemCodeAndTypeOrderByCode(obj.getCode(), obj.getType()));
+		eventDatas = null;
+		return null;
 	}
 
 	@Override
 	@Transactional
 	public GeneralLog save(GeneralLog obj) {
-		if(obj.getCode()!=null){
+		if (obj.getCode() != null) {
 			generalLogRepo.save(obj);
 		}
 		return null;
@@ -120,35 +112,27 @@ public class GeneralLogServiceImpl implements GeneralLogService {
 
 	@Override
 	public void deleteAllBySystemCode(String systemCode) {
-		// TODO Auto-generated method stub
-		
 	}
 
-	ArrayList<DragAndDrop> dragAndDrops;
 	@Override
 	public void updateByCode(ArrayList<DragAndDrop> dragAndDrops) {
-		this.dragAndDrops=dragAndDrops;
+		this.dragAndDrops = dragAndDrops;
 	}
 
 	@Override
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public List<GeneralLog> findByCodeLikeOrderByCode(String code) {
-		// TODO Auto-generated method stub
 		return generalLogRepo.findByCodeContaining(code);
 	}
 
 	@Override
 	public List<GeneralLog> findAll() {
-		// TODO Auto-generated method stub
 		return generalLogRepo.findAll();
 	}
 
 	@Override
 	public GeneralLog findByCodeAndType(String code, String type) {
-		// TODO Auto-generated method stub
 		return generalLogRepo.findByCodeAndType(code, type);
 	}
-
-	
 
 }

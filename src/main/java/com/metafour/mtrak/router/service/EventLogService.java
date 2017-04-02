@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.metafour.mtrak.router.entities.EventLog;
 
 /**
- * @author noor
+ * @author minhaj
  *
  */
 public interface EventLogService {
@@ -13,4 +13,10 @@ public interface EventLogService {
 	ArrayList<EventLog> findAllBySystemCodeAndTypeOrderByCode(String systemCode, String type);
 	EventLog save(EventLog obj);
 	void delete(EventLog obj);
+	boolean checkDuplicate(EventLog eventLog);
+	void addEvent(EventLog eventLog);
+	void modifiedEvent(EventLog eventLog);
+	void deleteEvent(String eventCode);
+	ArrayList<EventLog> eventList();
+	void clearEventList();
 }
